@@ -24,7 +24,7 @@ class Comic
       $this->comic_cover   =  $data_array["cover"];
       $this->comic_desc    =  $data_array["description"];
       $this->comic_author  =  $data_array["author"];
-      $this->comic_status  =  intval($data_array["status"]);
+      $this->comic_status  =  (intval($data_array["status"]) === 1) ? "OnGoing" : "Ended";
       $this->comic_rating  =  floatval($data_array["rating"]);
       $this->comic_genre   =  explode(",", $data_array["genre"]);
       $this->comic_slug    =  $data_array["komik_name"];

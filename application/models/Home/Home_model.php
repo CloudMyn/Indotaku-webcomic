@@ -25,8 +25,6 @@ class Home_model extends CI_Model
     */
    public function get_all_comic(): array
    {
-      $this->load->helper("model");
-
       $lists_array = $this->db->get_where("_komik", ["is_active" => 1])->result_array();
       $comics_array = [];
 

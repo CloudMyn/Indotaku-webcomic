@@ -1,6 +1,6 @@
 <?php
 
-
+$my_path = "http://localhost/komikins/assets/image/komik/";
 $this->load->helper("model");
 ?>
 
@@ -26,16 +26,16 @@ $this->load->helper("model");
                      <div class="bxcontent-items">
 
                         <div class="thumbnail">
-                           <img src="http://localhost/komikins/assets/image/komik/<?= $data->comic_cover?>" alt="Comic Cover">
+                           <img src="<?= $my_path . $data->comic_cover ?>" alt="Comic Cover">
                         </div>
                         <div class="info-details">
                            <a href="./comic_page.html" class="text-decoration-none title">
-                              <?= $data->comic_name?>
+                              <?= $data->comic_name ?>
                            </a>
 
                            <div class="small-box">
-                              <div class="type"><?= $data->comic_type?></div>
-                              <div class="status"><?= $data->comic_status?></div>
+                              <div class="type"><?= $data->comic_type ?></div>
+                              <div class="status"><?= $data->comic_status ?></div>
                            </div>
 
 
@@ -76,15 +76,18 @@ $this->load->helper("model");
 
                <h2 class="text-main-color content-title text-center">Our Discord</h2>
                <hr class="my-2">
-               <img src="./src/Join-Us.png" alt="discord img" width="100%">
+               <img src="<?= base_url("assets/Join-Us.png") ?>" alt="discord img" width="100%">
 
             </div>
 
-            <div id="genre" class="sbox mb-3 box-shadow-min">
+            <div class="sbox mb-3 box-shadow-min">
 
                <h2 class="text-main-color content-title text-center">Genre</h2>
                <hr class="my-2">
-               <ul class="genre-ul" id="genre-list">
+               <ul class="genre-ul">
+                  <?php foreach ($genres as $genre) : ?>
+                     <li class="genre-li"><a class="list-a" href="#"><?= $genre["genre"] ?></a></li>
+                  <?php endforeach; ?>
                </ul>
 
             </div>
@@ -95,65 +98,51 @@ $this->load->helper("model");
                <hr class="mt-2 mb-0 mx-2">
                <div class="komik-populer-box">
                   <ul>
-                     <li class="topone">
-                        <img src="./src/Sampul/BlackClover.jpg" alt="cover">
-                        <div class="komik">
-                           <div class="rank">
-                              <p class="rank-1">1</p>
-                           </div>
-                           <a href="comic_page.html" class="r-series">
-                              <img src="./src/Sampul/BlackClover.jpg" alt="cover">
-                           </a>
-                           <a href="comic_page.html" class="l-series">
-                              <p class="max-lines set-lines-1 popular-title">Black Clover
-                              </p>
-                              <p class="max-lines set-lines-3">Action, Magic, Adventure, Shounen
-                              </p>
-                           </a>
-                        </div>
-                     </li>
-                     <li class="top-ten">
-                        <div class="rank">
-                           <p class="top-ten-rank">2</p>
-                        </div>
-                        <a href="comic_page.html" class="r-series">
-                           <img src="./src/Sampul/ca66f8f6e148cde9f9755b144e518587.th.jpg" alt="cover">
-                        </a>
-                        <a href="comic_page.html" class="l-series">
-                           <p class="max-lines set-lines-1 popular-title text-secondary">King Avatar</p>
-                           <p class="max-lines set-lines-3 text-secondary">Action, Magic, Adventure,
-                              Shounen, Game, Isekai, Ecchi</p>
-                        </a>
-                     </li>
 
-                     <!-- <hr class="mt-2"> -->
-                     <li class="top-ten">
-                        <div class="rank">
-                           <p class="top-ten-rank">3</p>
-                        </div>
-                        <a href="comic_page.html" class="r-series">
-                           <img src="./src/Sampul/5IlxL2PfQ8CyY4TLRru9TcU56b3(1).jpg" alt="cover">
-                        </a>
-                        <a href="comic_page.html" class="l-series">
-                           <p class="max-lines set-lines-1 popular-title text-secondary">Owari No Seraph
-                           </p>
-                           <p class="max-lines set-lines-3 text-secondary">Action, Magic, Drama, Romance,
-                              Shounen, Ecchi</p>
-                        </a>
-                     </li>
-                     <li class="top-ten">
-                        <div class="rank">
-                           <p class="top-ten-rank">4</p>
-                        </div>
-                        <a href="comic_page.html" class="r-series">
-                           <img src="./src/Sampul/Aldnoa.jpg" alt="cover">
-                        </a>
-                        <a href="comic_page.html" class="l-series">
-                           <p class="max-lines set-lines-1 popular-title text-secondary">Aldnoa Zero</p>
-                           <p class="max-lines set-lines-3 text-secondary">Action, Sci-fi, Adventure,
-                              Seinen, Game</p>
-                        </a>
-                     </li>
+                     <?php $index = 1 ?>
+                     <?php foreach ($popular_comics as $comic) : ?>
+
+                        <?php if ($index === 1) : ?>
+
+                           <li class="topone">
+                              <img src="<?= $my_path . $comic->comic_cover ?>" alt="cover">
+                              <div class="komik">
+                                 <div class="rank">
+                                    <p class="rank-1"><?= $index ?></p>
+                                 </div>
+                                 <a href="comic_page.html" class="r-series">
+                                    <img src="<?= $my_path . $comic->comic_cover ?>" alt="cover">
+                                 </a>
+                                 <a href="comic_page.html" class="l-series">
+                                    <p class="max-lines set-lines-1 popular-title">
+                                       <?= $comic->comic_name ?>
+                                    </p>
+                                    <p class="max-lines set-lines-3">
+                                       <?= join(", ", $comic->comic_genre) ?>
+                                    </p>
+                                 </a>
+                              </div>
+                           </li>
+
+                        <?php else : ?>
+
+                           <li class="top-ten">
+                              <div class="rank">
+                                 <p class="top-ten-rank"><?= $index ?></p>
+                              </div>
+                              <a href="comic_page.html" class="r-series">
+                                 <img src="<?= $my_path . $comic->comic_cover ?>" alt="cover">
+                              </a>
+                              <a href="comic_page.html" class="l-series">
+                                 <p class="max-lines set-lines-1 popular-title text-secondary"> <?= $comic->comic_name ?></p>
+                                 <p class="max-lines set-lines-3 text-secondary"><?= join(", ", $comic->comic_genre) ?></p>
+                              </a>
+                           </li>
+
+                        <?php endif; ?>
+                        <?php $index++ ?>
+                     <?php endforeach; ?>
+
                   </ul>
                </div>
             </div>
@@ -166,3 +155,4 @@ $this->load->helper("model");
 
    </div>
 </section>
+

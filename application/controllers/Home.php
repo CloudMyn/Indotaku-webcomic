@@ -20,12 +20,13 @@ class Home extends CI_Controller
     }
 
     public function index(){
-        $data["comic_model"]    = $this->home->get_all_comic();
-        $data["title"]          =   "Hallo World";
 
-        $this->load->view("Templates/header.php", $data);
-        $this->load->view("Templates/navbar.php", $data);
-        $this->load->view("Home_page/home_page.php", $data);
-        $this->load->view("Templates/footer.php", $data);
+
+        $data["title"]          =   "Hallo World";
+        $data["comic_model"]    =   $this->home->get_all_comic();
+        $data["popular_comics"] =   $this->home->get_popular_comics();
+        $data["genres"]         =   $this->home->get_all_genres();
+
+        get_views("Home_page/home_page.php", $data);
     }
 }

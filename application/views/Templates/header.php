@@ -9,14 +9,14 @@
    <meta name="keywords" content="">
    <title><?= $title ?></title>
 
-   <link rel="stylesheet" href="<?= base_url() ?>/assets/css/style.css">
-   <link rel="stylesheet" href="<?= base_url() ?>/assets/css/bootstrap.min.css">
-   <link rel="stylesheet" href="<?= base_url() ?>/assets/font-awesome/css/font-awesome.min.css">
+   <link rel="stylesheet" href="<?= base_url() ?>assets/css/style.css">
+   <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap.min.css">
+   <link rel="stylesheet" href="<?= base_url() ?>assets/font-awesome/css/font-awesome.min.css">
 
 
-   <link rel="stylesheet" href="<?= base_url() ?>/assets/css/view/mobile-view.css">
-   <link rel="stylesheet" href="<?= base_url() ?>/assets/css/view/tablet-view.css">
-   <link rel="stylesheet" href="<?= base_url() ?>/assets/css/view/desktop-view.css">
+   <link rel="stylesheet" href="<?= base_url() ?>assets/css/view/mobile-view.css">
+   <link rel="stylesheet" href="<?= base_url() ?>assets/css/view/tablet-view.css">
+   <link rel="stylesheet" href="<?= base_url() ?>assets/css/view/desktop-view.css">
 
    <style>
       /* ---------------------------------- Header & Nav Style ---------------------------------- */

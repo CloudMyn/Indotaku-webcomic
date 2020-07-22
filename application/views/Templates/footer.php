@@ -11,7 +11,7 @@
       nama tokoh, dan alur cerita. Untuk versi aslinya, silahkan beli komiknya jika tersedia di kotamu.
    </h6>
    <div class="foo-end">
-      <h5><?= date("y")?> inOtaku.com - All Right Reserved</h5>
+      <h5><?= date("Y")?> inOtaku.com - All Right Reserved</h5>
    </div>
 </footer>
 

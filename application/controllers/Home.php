@@ -16,16 +16,17 @@ class Home extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model("Home/Home_model", "home");
+        $this->load->model("Comic/Comic_model", "comic");
+        $this->load->model("Components/Components", "comps");
     }
 
     public function index(){
 
 
         $data["title"]          =   "Hallo World";
-        $data["comic_model"]    =   $this->home->get_all_comic();
-        $data["popular_comics"] =   $this->home->get_popular_comics();
-        $data["genres"]         =   $this->home->get_all_genres();
+        $data["comic_model"]    =   $this->comic->get_all_comic();
+        $data["popular_comics"] =   $this->comps->get_popular_comics();
+        $data["genres"]         =   $this->comps->get_all_genres();
 
         get_views("Home_page/home_page.php", $data);
     }

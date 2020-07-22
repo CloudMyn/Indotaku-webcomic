@@ -15,7 +15,7 @@ class Comic
    public $comic_id, $comic_name, $comic_slug, $comic_cover, $comic_desc, $comic_author,
       $comic_genre, $comic_status, $comic_rating, $comic_type, $published,
       $comic_source, $comic_web_src, $visited, $upvotes, $posted_by, $released,
-      $is_my_project, $is_18plus, $like, $disLike, $total_chapter;
+      $is_my_project, $is_18plus, $like, $disLike, $total_chapter, $comic_update;
 
    public function __construct($data_array)
    {
@@ -41,6 +41,6 @@ class Comic
       $this->like          =  intval($data_array["comic_like"]);
       $this->disLike       =  intval($data_array["comic_dislike"]);
       $this->published     =  intval($data_array["comic_date"]);
-      $this->comic_updated =  intval($data_array["comic_update"]);
+      $this->comic_update  =  intval($data_array["comic_update"]);
    }
 }

@@ -1,7 +1,7 @@
 <?php
 
-$my_path = "http://localhost/komikins/assets/image/komik/";
-$this->load->helper("model");
+
+$my_path = get_url_cover();
 ?>
 
 
@@ -29,7 +29,7 @@ $this->load->helper("model");
                            <img src="<?= $my_path . $data->comic_cover ?>" alt="Comic Cover">
                         </div>
                         <div class="info-details">
-                           <a href="./comic_page.html" class="text-decoration-none title">
+                           <a href="<?= base_url("tampilkan/komik/" . $data->comic_slug) ?>" class="text-decoration-none title">
                               <?= $data->comic_name ?>
                            </a>
 
@@ -114,15 +114,35 @@ $this->load->helper("model");
                                     <img src="<?= $my_path . $comic->comic_cover ?>" alt="cover">
                                  </a>
                                  <a href="comic_page.html" class="l-series">
+                                    <p class="max-lines set-lines-1 popular-title"><?= $comic->comic_name ?>
+                                    </p>
+                                    <p class="max-lines set-lines-2"><?= join(", ", $comic->comic_genre) ?>
+                                    </p>
+                                    <p class="max-lines set-lines-1 text-secondary type tpone"><?= $comic->comic_type ?></p>
+                                 </a>
+                              </div>
+                           </li>
+
+                           <!-- <li class="topone">
+                              <img src="<?= $my_path . $comic->comic_cover ?>" alt="cover">
+                              <div class="komik">
+                                 <div class="rank">
+                                    <p class="rank-1"><?= $index ?></p>
+                                 </div>
+                                 <a href="comic_page.html" class="r-series">
+                                    <img src="<?= $my_path . $comic->comic_cover ?>" alt="cover">
+                                 </a>
+                                 <a href="comic_page.html" class="l-series">
                                     <p class="max-lines set-lines-1 popular-title">
                                        <?= $comic->comic_name ?>
                                     </p>
                                     <p class="max-lines set-lines-3">
                                        <?= join(", ", $comic->comic_genre) ?>
                                     </p>
+                                    <p class="max-lines set-lines-1 text-secondary type tpone"><?= $comic->comic_type ?></p>
                                  </a>
                               </div>
-                           </li>
+                           </li> -->
 
                         <?php else : ?>
 
@@ -136,6 +156,7 @@ $this->load->helper("model");
                               <a href="comic_page.html" class="l-series">
                                  <p class="max-lines set-lines-1 popular-title text-secondary"> <?= $comic->comic_name ?></p>
                                  <p class="max-lines set-lines-3 text-secondary"><?= join(", ", $comic->comic_genre) ?></p>
+                                 <p class="max-lines set-lines-1 text-secondary type"><?= $comic->comic_type ?></p>
                               </a>
                            </li>
 
@@ -155,4 +176,3 @@ $this->load->helper("model");
 
    </div>
 </section>
-

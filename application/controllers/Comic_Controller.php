@@ -3,7 +3,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Tampilkan extends CI_Controller
+class Comic_Controller extends CI_Controller
 {
    /**
     *  -------------------------------------------------------
@@ -20,15 +20,26 @@ class Tampilkan extends CI_Controller
       $this->load->model("Components/Components", "comps");
    }
 
-   public function komik($comic_slug)
+   public function get_comic($comic_slug)
    {
       if (!$comic_slug) to("Home");
 
       $data["title"]          =  "Komik " . replace($comic_slug) . " Bahasa Indonesia";
       $data["data"]           =   $this->comic->get_comic($comic_slug);
       $data["popular_comics"] =   $this->comps->get_popular_comics();
+      $data["chapters"]       =   $this->comic->get_comic_chapter($comic_slug);
+      $data["similiar_comic"] =   $this->comps->get_similiar_comic($data['data']->comic_genre);
       $data["genres"]         =   $this->comps->get_all_genres();
 
       get_views("Comic_page/comic_view.php", $data);
+   }
+
+   public function get_comic_chapter($chapter_slug)
+   {
+      if (!$chapter_slug) to("Home");
+
+      $data["title"]       =  "Comic Title";
+      $data["chapter"]     =  $this->comic->get_chapter($chapter_slug);
+      $this->load->view("Chapter_page/chapter_view.php", $data);
    }
 }

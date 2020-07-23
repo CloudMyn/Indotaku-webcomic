@@ -1,7 +1,6 @@
 <?php
 
 $my_path = get_url_cover();
-
 ?>
 
 <style>
@@ -59,13 +58,14 @@ $my_path = get_url_cover();
                   </div>
                   <div class="comic-info">
                      <div class="comic-title">
-                        <h3><?= $data->comic_name ?></h3>
+                        <h3><?= $data->comic_name ?> - Bahasa Indonesia</h3>
                      </div>
                      <div class="comic-spec">
                         <span>
                            <b>Genres:</b>
-                           <a href="#"> Action</a>, <a href="#">Comedy</a>, <a href="#">Fantasy</a>,
-                           <a href="#">Martial Arts</a>, <a href="#">Shounen</a>
+                           <?php foreach ($data->comic_genre as $genre) : ?>
+                              <a href="#"> <?= $genre ?></a>,
+                           <?php endforeach; ?>
                         </span>
                         <span>
                            <b>Author:</b>
@@ -108,66 +108,22 @@ $my_path = get_url_cover();
                <div class="tags">
                   <h5>Keywords</h5>
                   <p> Baca Komik Re: Zero Bahasa Indonesia | Baca Online Komik Re: Zero | Baca Manga Re: Zero
-                     |
-                     Re: Zero Bahasa Indonesia Manga</p>
+                     | Re: Zero Bahasa Indonesia Manga</p>
                </div>
 
             </div>
 
             <div class="sbox mb-3 box-shadow-min">
-               <h2 class="text-main-color content-title text-center">Chapter Re: Zero</h2>
+               <h2 class="text-main-color content-title text-center">Chapter <?= $data->comic_name ?></h2>
                <hr class="my-2">
                <div class="chapters-box">
-                  <div class="chapter-item">
-                     <a href="chapter_page.html" class="title">Chapter 10</a>
-                     <p class="time-ago">2 hours ago</p>
-                     <button class="btn-chapter-dwd">Unduh</button>
-                  </div>
-                  <div class="chapter-item">
-                     <a href="chapter_page.html" class="title">Chapter 9</a>
-                     <p class="time-ago">5 hours ago</p>
-                     <button class="btn-chapter-dwd">Unduh</button>
-                  </div>
-                  <div class="chapter-item">
-                     <a href="chapter_page.html" class="title readed">Chapter 8</a>
-                     <p class="time-ago">6 hours ago</p>
-                     <button class="btn-chapter-dwd">Unduh</button>
-                  </div>
-                  <div class="chapter-item">
-                     <a href="chapter_page.html" class="title readed">Chapter 7</a>
-                     <p class="time-ago">12 hours ago</p>
-                     <button class="btn-chapter-dwd">Unduh</button>
-                  </div>
-                  <div class="chapter-item">
-                     <a href="chapter_page.html" class="title readed">Chapter 6</a>
-                     <p class="time-ago">23 hours ago</p>
-                     <button class="btn-chapter-dwd">Unduh</button>
-                  </div>
-                  <div class="chapter-item">
-                     <a href="chapter_page.html" class="title readed">Chapter 5</a>
-                     <p class="time-ago">2 days ago</p>
-                     <button class="btn-chapter-dwd">Unduh</button>
-                  </div>
-                  <div class="chapter-item">
-                     <a href="chapter_page.html" class="title readed">Chapter 4</a>
-                     <p class="time-ago">1 week ago</p>
-                     <button class="btn-chapter-dwd">Unduh</button>
-                  </div>
-                  <div class="chapter-item">
-                     <a href="chapter_page.html" class="title readed">Chapter 3</a>
-                     <p class="time-ago">1 years ago</p>
-                     <button class="btn-chapter-dwd">Unduh</button>
-                  </div>
-                  <div class="chapter-item">
-                     <a href="chapter_page.html" class="title readed">Chapter 2</a>
-                     <p class="time-ago">5 years ago</p>
-                     <button class="btn-chapter-dwd">Unduh</button>
-                  </div>
-                  <div class="chapter-item">
-                     <a href="chapter_page.html" class="title readed">Chapter 1</a>
-                     <p class="time-ago">6 years ago</p>
-                     <button class="btn-chapter-dwd">Unduh</button>
-                  </div>
+                  <?php foreach ($chapters as $chapter) : ?>
+                     <div class="chapter-item">
+                        <a href="<?= base_url("chapter/" . $chapter->chapter_slug) ?>" class="title"><?= $chapter->chapter_name ?></a>
+                        <p class="time-ago">2 hours ago</p>
+                        <button class="btn-chapter-dwd">Unduh</button>
+                     </div>
+                  <?php endforeach; ?>
                </div>
             </div>
 
@@ -175,66 +131,25 @@ $my_path = get_url_cover();
 
             <div class="sbox mb-3 box-shadow-min">
 
-               <h2 class="text-main-color content-title text-center">Mirip Komik Re: Zero</h2>
+               <h2 class="text-main-color content-title text-center">Mirip <?= $data->comic_name ?></h2>
                <hr class="my-2">
 
                <div class="sp-comicbox pb-2">
 
-                  <div class="sp-comicbox-items">
+                  <?php foreach ($similiar_comic as $comic) : ?>
+                     <div class="sp-comicbox-items">
 
-                     <a class="sp-thumb" href="./comic_page.html">
-                        <img src="./src/sampul/Naruto.jpg" alt="Comic Cover">
-                     </a>
-                     <a href="./comic_page.html" class="text-decoration-none title max-lines set-lines-2">
-                        Uzumaki Naruto
-                     </a>
+                        <a class="sp-thumb" href="<?= base_url("komik/" . $comic->comic_slug) ?>">
+                           <img src="<?= $my_path . $comic->comic_cover ?>" alt="Comic Cover">
+                        </a>
+                        <a href="<?= base_url("komik/" . $comic->comic_slug) ?>" class="text-decoration-none title max-lines set-lines-2">
+                           <?= $comic->comic_name ?>
+                        </a>
 
-                  </div>
-
-                  <div class="sp-comicbox-items">
-
-                     <a class="sp-thumb" href="./comic_page.html">
-                        <img src="./src/sampul/Noragami.jpg" alt="Comic Cover">
-                     </a>
-                     <a href="./comic_page.html" class="text-decoration-none title max-lines set-lines-2">
-                        Noragami
-                     </a>
+                     </div>
+                  <?php endforeach; ?>
 
 
-                  </div>
-
-                  <div class="sp-comicbox-items">
-
-                     <a class="sp-thumb" href="./comic_page.html">
-                        <img src="./src/sampul/Aldnoa.jpg" alt="Comic Cover">
-                     </a>
-                     <a href="./comic_page.html" class="text-decoration-none title max-lines set-lines-2">
-                        Aldnoa
-                     </a>
-
-                  </div>
-
-                  <div class="sp-comicbox-items">
-
-                     <a class="sp-thumb" href="./comic_page.html">
-                        <img src="./src/sampul/FairyGone.jpg" alt="Comic Cover">
-                     </a>
-                     <a href="./comic_page.html" class="text-decoration-none title max-lines set-lines-2">
-                        Fairy Gone
-                     </a>
-
-                  </div>
-
-                  <div class="sp-comicbox-items">
-
-                     <a class="sp-thumb" href="./comic_page.html">
-                        <img src="./src/sampul/AttackOnTitans.jpg" alt="Comic Cover">
-                     </a>
-                     <a href="./comic_page.html" class="text-decoration-none title max-lines set-lines-2">
-                        Attack On Titans
-                     </a>
-
-                  </div>
 
 
                </div>
@@ -274,10 +189,10 @@ $my_path = get_url_cover();
                                  <div class="rank">
                                     <p class="rank-1"><?= $index ?></p>
                                  </div>
-                                 <a href="comic_page.html" class="r-series">
+                                 <a href="<?= base_url("komik/" . $comic->comic_slug) ?>" class="r-series">
                                     <img src="<?= $my_path . $comic->comic_cover ?>" alt="cover">
                                  </a>
-                                 <a href="comic_page.html" class="l-series">
+                                 <a href="<?= base_url("komik/" . $comic->comic_slug) ?>" class="l-series">
                                     <p class="max-lines set-lines-1 popular-title">
                                        <?= $comic->comic_name ?>
                                     </p>
@@ -294,10 +209,10 @@ $my_path = get_url_cover();
                               <div class="rank">
                                  <p class="top-ten-rank"><?= $index ?></p>
                               </div>
-                              <a href="comic_page.html" class="r-series">
+                              <a href="<?= base_url("komik/" . $comic->comic_slug) ?>" class="r-series">
                                  <img src="<?= $my_path . $comic->comic_cover ?>" alt="cover">
                               </a>
-                              <a href="comic_page.html" class="l-series">
+                              <a href="<?= base_url("komik/" . $comic->comic_slug) ?>" class="l-series">
                                  <p class="max-lines set-lines-1 popular-title text-secondary"> <?= $comic->comic_name ?></p>
                                  <p class="max-lines set-lines-3 text-secondary"><?= join(", ", $comic->comic_genre) ?></p>
                               </a>

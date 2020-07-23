@@ -2,6 +2,15 @@
 
 
 $my_path = get_url_cover();
+
+
+
+function get_alias_ch(string $chapter_name): string
+{
+   $arr = explode(" ", $chapter_name);
+   array_shift($arr);
+   return "Ch. " . end($arr);
+}
 ?>
 
 
@@ -29,7 +38,8 @@ $my_path = get_url_cover();
                            <img src="<?= $my_path . $data->comic_cover ?>" alt="Comic Cover">
                         </div>
                         <div class="info-details">
-                           <a href="<?= base_url("tampilkan/komik/" . $data->comic_slug) ?>" class="text-decoration-none title">
+                           <a href="#wkwkwkw" class="d-none"><?= $data->comic_name . " Bahasa Indonesia" ?></a>
+                           <a href="<?= base_url("komik/" . $data->comic_slug) ?>" class="text-decoration-none title">
                               <?= $data->comic_name ?>
                            </a>
 
@@ -40,18 +50,17 @@ $my_path = get_url_cover();
 
 
                            <span class="latest-chapters">
-                              <span class="chapter-list">
-                                 <a href="#" class="text-decoration-none">Ch. 8</a>
-                                 <p>2 hours ago</p>
-                              </span>
-                              <span class="chapter-list">
-                                 <a href="#" class="text-decoration-none">Ch. 7</a>
-                                 <p>12 hours ago</p>
-                              </span>
-                              <span class="chapter-list">
-                                 <a href="#" class="text-decoration-none">Ch. 6</a>
-                                 <p>1 day ago</p>
-                              </span>
+                              <?php
+                              $this->load->model("Comic/Comic_model.php", "comic");
+                              $this->load->helper("model");
+                              $x3_chaps = $this->comic->get_limit_chapter($data->comic_slug, 3);
+                              ?>
+                              <?php foreach ($x3_chaps as $chapter) : ?>
+                                 <span class="chapter-list">
+                                    <a href="#" class="text-decoration-none"><?= get_alias_ch($chapter->chapter_name) ?></a>
+                                    <p>2 hours ago</p>
+                                 </span>
+                              <?php endforeach; ?>
                            </span>
                         </div>
 
@@ -92,6 +101,8 @@ $my_path = get_url_cover();
 
             </div>
 
+
+
             <div class="sbox mb-3 box-shadow-min px-0">
 
                <h2 class="text-main-color content-title text-center">Komik Populer</h2>
@@ -110,10 +121,10 @@ $my_path = get_url_cover();
                                  <div class="rank">
                                     <p class="rank-1"><?= $index ?></p>
                                  </div>
-                                 <a href="comic_page.html" class="r-series">
+                                 <a href="<?= base_url("komik/" . $comic->comic_slug)?>" class="r-series">
                                     <img src="<?= $my_path . $comic->comic_cover ?>" alt="cover">
                                  </a>
-                                 <a href="comic_page.html" class="l-series">
+                                 <a href="<?= base_url("komik/" . $comic->comic_slug)?>" class="l-series">
                                     <p class="max-lines set-lines-1 popular-title"><?= $comic->comic_name ?>
                                     </p>
                                     <p class="max-lines set-lines-2"><?= join(", ", $comic->comic_genre) ?>
@@ -123,37 +134,16 @@ $my_path = get_url_cover();
                               </div>
                            </li>
 
-                           <!-- <li class="topone">
-                              <img src="<?= $my_path . $comic->comic_cover ?>" alt="cover">
-                              <div class="komik">
-                                 <div class="rank">
-                                    <p class="rank-1"><?= $index ?></p>
-                                 </div>
-                                 <a href="comic_page.html" class="r-series">
-                                    <img src="<?= $my_path . $comic->comic_cover ?>" alt="cover">
-                                 </a>
-                                 <a href="comic_page.html" class="l-series">
-                                    <p class="max-lines set-lines-1 popular-title">
-                                       <?= $comic->comic_name ?>
-                                    </p>
-                                    <p class="max-lines set-lines-3">
-                                       <?= join(", ", $comic->comic_genre) ?>
-                                    </p>
-                                    <p class="max-lines set-lines-1 text-secondary type tpone"><?= $comic->comic_type ?></p>
-                                 </a>
-                              </div>
-                           </li> -->
-
                         <?php else : ?>
 
                            <li class="top-ten">
                               <div class="rank">
                                  <p class="top-ten-rank"><?= $index ?></p>
                               </div>
-                              <a href="comic_page.html" class="r-series">
+                              <a href="<?= base_url("komik/" . $comic->comic_slug)?>" class="r-series">
                                  <img src="<?= $my_path . $comic->comic_cover ?>" alt="cover">
                               </a>
-                              <a href="comic_page.html" class="l-series">
+                              <a href="<?= base_url("komik/" . $comic->comic_slug)?>" class="l-series">
                                  <p class="max-lines set-lines-1 popular-title text-secondary"> <?= $comic->comic_name ?></p>
                                  <p class="max-lines set-lines-3 text-secondary"><?= join(", ", $comic->comic_genre) ?></p>
                                  <p class="max-lines set-lines-1 text-secondary type"><?= $comic->comic_type ?></p>

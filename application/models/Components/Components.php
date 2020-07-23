@@ -12,6 +12,7 @@
 class Components extends CI_Model
 {
    private $_active_comic = ["comic_active" => 1];
+   private $_comic_table, $_chapter_table;
    public function __construct()
    {
       parent::__construct();
@@ -19,10 +20,12 @@ class Components extends CI_Model
       /// ------ Get Active Server ------
       $active_server  =   get_active_server();
       $data  =   get_active_table($active_server);
-      $this->_comic_table  = $data["ws_komik_table"];
-      $this->_chapter_table = $data["ws_komik_ch_table"];
+      $this->_comic_table  = "_komik";
+      $this->_chapter_table = "_komik_chapters";
+      // $this->_comic_table  = $data["ws_komik_table"];
+      // $this->_chapter_table = $data["ws_komik_ch_table"];
    }
-   
+
    /**
     * -----------------------------------
     * [`Get All Comic Data With Status`] `=` `1`
@@ -32,7 +35,8 @@ class Components extends CI_Model
    public function get_popular_comics(): array
    {
       $this->db->order_by("comic_like", "DESC");
-      $array_data = $this->db->get_where("_komik", $this->_active_comic, 10)->result_array();
+      $this->db->select("comic_name, comic_cover, comic_type, comic_slug, comic_genre");
+      $array_data = $this->db->get_where($this->_comic_table, $this->_active_comic, 7)->result_array();
 
       return $this->_array_to_comic_obj($array_data);
    }
@@ -48,6 +52,23 @@ class Components extends CI_Model
    {
       $this->db->select("name,genre");
       return $this->db->get("_komik_genre")->result_array();
+   }
+
+   public function get_similiar_comic($genres)
+   {
+      $index = 0;
+      foreach ($genres as $genre) {
+         if ($index === 0) {
+            $this->db->or_like("comic_genre", $genre, "both");
+         } else {
+            $this->db->like("comic_genre", $genre, "both");
+         }
+         $index++;
+      }
+      $this->db->select("`comic_name`, `comic_cover`, `comic_slug`");
+      // $this->db->order_by("comic_update", "DESC");
+      $array_data = $this->db->get_where($this->_comic_table, $this->_active_comic, 5)->result_array();
+      return $this->_array_to_comic_obj($array_data);
    }
 
 

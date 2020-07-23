@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------------
@@ -49,6 +49,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'Home';
+$route['default_controller'] = 'Home_Controller';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+$route["home"] = "Home_Controller/index";
+$route["chapter/([a-zA-Z 0-9 \-.]*)"] = "Comic_controller/get_comic_chapter/$1";
+$route["komik/([a-zA-Z 0-9 \-]*)"] =   function ($comic_slug) {
+   return 'comic_controller/get_comic/' . $comic_slug;
+};

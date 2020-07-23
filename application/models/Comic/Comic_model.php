@@ -45,7 +45,8 @@ class Comic_model extends CI_Model
    public function get_limit_chapter($comic_slug, $limit)
    {
       $this->db->select("comic_slug, chapter_slug, chapter_name", "chapter_date");
-      $this->db->order_by("chapter_date", "ASC");
+      $this->db->order_by("chapter_id", "ASC");
+      $this->db->order_by("chapter_slug", "ASC");
       $array = $this->db->get_where($this->_chapter_table, ["comic_slug" => $comic_slug], $limit)->result_array();
       return $this->_array_to_obj($array, false);
    }
@@ -53,7 +54,8 @@ class Comic_model extends CI_Model
    public function get_comic_chapter(string $comic_slug)
    {
       $this->db->select("comic_slug, chapter_slug, chapter_name", "chapter_date");
-      $this->db->order_by("chapter_order", "DESC");
+      $this->db->order_by("chapter_id", "ASC");
+      $this->db->order_by("chapter_slug", "ASC");
       $array = $this->db->get_where($this->_chapter_table, ["comic_slug" => $comic_slug])->result_array();
       return $this->_array_to_obj($array, false);
    }

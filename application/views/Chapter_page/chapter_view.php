@@ -179,7 +179,7 @@ $my_path = get_url_cover();
             <div class="collapse navbar-collapse" id="collapsibleNavId">
                <ul class="navbar-nav mt-2 mt-lg-0">
                   <li class="nav-item active">
-                     <a class="nav-link" href="<?= base_url()?>"><i class="fa fa-home" aria-hidden="true"></i><span class="sr-only">(current)</span> <span>Beranda</span></a>
+                     <a class="nav-link" href="<?= base_url() ?>"><i class="fa fa-home" aria-hidden="true"></i><span class="sr-only">(current)</span> <span>Beranda</span></a>
                   </li>
                   <li class="nav-item">
                      <a class="nav-link" href="comic_lists.html"><i class="fa fa-th-list" aria-hidden="true"></i><span class="sr-only">(current)</span> <span>Daftar Komik</span></a>
@@ -200,7 +200,7 @@ $my_path = get_url_cover();
 
          <div class="headpost">
             <h3><?= filter_dashes($chapter->chapter_slug) ?></h3>
-            <p>Chapter Lenkap Komik <a href="<?= base_url("komik/" . $chapter->comic_slug)?>"><?= filter_dashes($chapter->comic_slug) ?></a></p>
+            <p>Chapter Lenkap Komik <a href="<?= base_url("komik/" . $chapter->comic_slug) ?>"><?= filter_dashes($chapter->comic_slug) ?></a></p>
          </div>
 
          <div class="cp-tags">
@@ -244,6 +244,11 @@ $my_path = get_url_cover();
          </div>
 
          <div class="chapter-box" id="chapter-box">
+            <?php foreach ($chapter->chapter_images as $chapter) : ?>
+               <div class="chapter-img">
+                  <img src="<?= "http://localhost/komikins/". $chapter ?>" alt="G.O">
+               </div>
+            <?php endforeach; ?>
          </div>
 
 
@@ -281,14 +286,14 @@ $my_path = get_url_cover();
       const chapter_box = document.getElementById("chapter-box");
       const chapterLists = <?= json_encode($chapter->chapter_images) ?>;
 
-      setTimeout(generateComicChapter, 1500)
+      // setTimeout(generateComicChapter, 1500)
 
       function generateComicChapter() {
          let allChapters = "";
          chapterLists.forEach((data) => {
             allChapters += `
                 <div class="chapter-img">
-                    <img src="<?= "http://localhost/komikins/"?>${data}" alt="G.O">
+                    <img src="<?= "http://localhost/komikins/" ?>${data}" alt="G.O">
                 </div>`;
          });
          // chapter_box.innerHTML = "";

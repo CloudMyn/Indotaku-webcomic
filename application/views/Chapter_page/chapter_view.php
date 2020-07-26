@@ -9,6 +9,7 @@ function filter_dashes(string $value)
 $my_path = get_url_cover();
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -245,9 +246,15 @@ $my_path = get_url_cover();
 
          <div class="chapter-box" id="chapter-box">
             <?php foreach ($chapter->chapter_images as $chapter) : ?>
-               <div class="chapter-img">
-                  <img src="<?= "http://localhost/komikins/". $chapter ?>" alt="G.O">
-               </div>
+               <?php if (preg_match("/(http:|https)+/", $chapter) == 0) : ?>
+                  <div class="chapter-img">
+                     <img src="<?= "http://localhost/komikins/" . $chapter ?>" alt="G.O">
+                  </div>
+               <?php else : ?>
+                  <div class="chapter-img">
+                     <img src="<?= $chapter ?>" alt="G.O">
+                  </div>
+               <?php endif; ?>
             <?php endforeach; ?>
          </div>
 
@@ -281,7 +288,6 @@ $my_path = get_url_cover();
          <h5><?= date("Y") ?> inOtaku.com - All Right Reserved</h5>
       </div>
    </footer>
-
    <script>
       const chapter_box = document.getElementById("chapter-box");
       const chapterLists = <?= json_encode($chapter->chapter_images) ?>;
@@ -291,16 +297,17 @@ $my_path = get_url_cover();
       function generateComicChapter() {
          let allChapters = "";
          chapterLists.forEach((data) => {
-            allChapters += `
+            let regexp = new RegExp("/(https:|http:)*/");
+            if (regexp.exec(data)) {
+               console.log(data);
+               allChapters += `
                 <div class="chapter-img">
                     <img src="<?= "http://localhost/komikins/" ?>${data}" alt="G.O">
                 </div>`;
+            }
          });
          // chapter_box.innerHTML = "";
          chapter_box.innerHTML = allChapters;
-         // <div class="chapter-img">
-         //     <img src="./assets/Greatest Outcast 001-010/Chapter 001/001.jpg" alt="G.O">
-         // </div>
       }
    </script>
 

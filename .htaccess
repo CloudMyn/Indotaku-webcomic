@@ -4,7 +4,30 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php/$1 [L]
 
 
-php_value max_execution_time 500000
-php_value upload_max_filesize 500M
-php_value max_file_uploads 500
-php_value post_max_size 500M
+
+<filesMatch "\.(html|htm|js|css)$">
+  FileETag None
+  <ifModule mod_headers.c>
+     Header unset ETag
+     Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+     Header set Pragma "no-cache"
+     Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
+  </ifModule>
+</filesMatch>
+
+
+<ifModule mod_expires.c>
+  ExpiresActive on
+  ExpiresDefault                            "access plus 0 minutes"
+  #css
+  ExpiresByType text/css                    "access plus 0 seconds"
+  #html
+  ExpiresByType text/html                   "access plus 0 seconds"
+  #javascript
+  ExpiresByType application/javascript      "access plus 0 seconds"
+  ExpiresByType application/javascript      "access plus 0 seconds"
+  ExpiresByType text/javascript             "access plus 0 seconds"
+</ifModule>
+
+ErrorDocument 403 http://localhost/komikins/block
+ErrorDocument 404 http://localhost/komikins/block

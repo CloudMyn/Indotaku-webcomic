@@ -21,10 +21,10 @@ class Comic_model extends CI_Model
       /// ------ Get Active Server ------
       $active_server  =   get_active_server();
       $data  =   get_active_table($active_server);
-      $this->_comic_table  = "_komik";
-      $this->_chapter_table = "_komik_chapters";
-      // $this->_comic_table  = $data["ws_komik_table"];
-      // $this->_chapter_table = $data["ws_komik_ch_table"];
+      // $this->_comic_table  = $this->_comic_table;
+      // $this->_chapter_table = "_komik_chapters";
+      $this->_comic_table  = $data["ws_komik_table"];
+      $this->_chapter_table = $data["ws_komik_ch_table"];
       $this->load->helper("model");
    }
    public function get_comic($comic_slug): Comic
@@ -45,7 +45,7 @@ class Comic_model extends CI_Model
    public function get_limit_chapter($comic_slug, $limit)
    {
       $this->db->select("comic_slug, chapter_slug, chapter_name, chapter_date");
-      $this->db->order_by("chapter_id", "ASC");
+      $this->db->order_by("chapter_id", "DESC");
       $this->db->order_by("chapter_slug", "ASC");
       $array = $this->db->get_where($this->_chapter_table, ["comic_slug" => $comic_slug], $limit)->result_array();
       return $this->_array_to_obj($array, false);
@@ -54,7 +54,7 @@ class Comic_model extends CI_Model
    public function get_comic_chapter(string $comic_slug)
    {
       $this->db->select("comic_slug, chapter_slug, chapter_name, chapter_date");
-      $this->db->order_by("chapter_id", "ASC");
+      $this->db->order_by("chapter_id", "DESC");
       $this->db->order_by("chapter_slug", "ASC");
       $array = $this->db->get_where($this->_chapter_table, ["comic_slug" => $comic_slug])->result_array();
       return $this->_array_to_obj($array, false);
@@ -70,8 +70,8 @@ class Comic_model extends CI_Model
    {
       $this->load->helper("model");
       $this->db->order_by("comic_update", "DESC");
-      $lists_array = $this->db->get_where("_komik", $this->_active_comic)->result_array();
       $this->db->select("`comic_name`, `comic_cover`, `comic_slug`, `comic_status`, `comic_type`");
+      $lists_array = $this->db->get_where($this->_comic_table, $this->_active_comic)->result_array();
       return $this->_array_to_obj($lists_array);
    }
 

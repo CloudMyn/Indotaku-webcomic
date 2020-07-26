@@ -20,10 +20,10 @@ class Components extends CI_Model
       /// ------ Get Active Server ------
       $active_server  =   get_active_server();
       $data  =   get_active_table($active_server);
-      $this->_comic_table  = "_komik";
-      $this->_chapter_table = "_komik_chapters";
-      // $this->_comic_table  = $data["ws_komik_table"];
-      // $this->_chapter_table = $data["ws_komik_ch_table"];
+      // $this->_comic_table  = "_komik";
+      // $this->_chapter_table = "_komik_chapters";
+      $this->_comic_table  = $data["ws_komik_table"];
+      $this->_chapter_table = $data["ws_komik_ch_table"];
    }
 
    /**
@@ -34,7 +34,7 @@ class Components extends CI_Model
     */
    public function get_popular_comics(): array
    {
-      $this->db->order_by("comic_like", "DESC");
+      $this->db->order_by("comic_visited", "DESC");
       $this->db->select("comic_name, comic_cover, comic_type, comic_slug, comic_genre");
       $array_data = $this->db->get_where($this->_comic_table, $this->_active_comic, 7)->result_array();
 

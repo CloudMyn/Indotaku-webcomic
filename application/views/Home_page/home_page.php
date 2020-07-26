@@ -57,7 +57,7 @@ function get_alias_ch(string $chapter_name): string
                               ?>
                               <?php foreach ($x3_chaps as $chapter) : ?>
                                  <span class="chapter-list">
-                                    <a href="#" class="text-decoration-none"><?= get_alias_ch($chapter->chapter_name) ?></a>
+                                    <a href="<?= base_url("chapter/".$chapter->chapter_slug) ?>" class="text-decoration-none"><?= get_alias_ch($chapter->chapter_name) ?></a>
                                     <p>2 hours ago</p>
                                  </span>
                               <?php endforeach; ?>

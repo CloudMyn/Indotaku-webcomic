@@ -83,10 +83,10 @@ class Comic_model extends CI_Model
     * -----------------------------------
     * @return      array[object]
     */
-   public function get_comic_limit($keyword = "", $limit, $offset): array
+   public function get_comic_limit($limit, $offset, $keyword = "", $order_by = "comic_update", $ordering = "DESC"): array
    {
       $this->load->helper("model");
-      $this->db->order_by("comic_update", "DESC");
+         $this->db->order_by($order_by, $ordering);
       if ($keyword !== "") {
          $this->db->like("comic_name", $keyword, "after");
          $this->db->or_like("comic_author", $keyword, "after");
@@ -105,10 +105,10 @@ class Comic_model extends CI_Model
     *  @param  String      Keyword Pencarian
     *  @return int         Total Komik
     */
-   public function getLatestComicQuery(String $keyword = null)
+   public function getLatestComicQuery(String $keyword = "")
    {
 
-      if ($keyword !== NULL) {
+      if ($keyword !== "") {
          $this->db->like("comic_name", $keyword, "after");
          $this->db->or_like("comic_author", $keyword, "after");
       }

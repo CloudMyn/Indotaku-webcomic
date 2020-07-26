@@ -7,6 +7,10 @@ function filter_dashes(string $value)
 }
 
 $my_path = get_url_cover();
+
+$menu = ["Beranda" => "fa-home|" . base_url(), "Daftar Komik" => "fa-th-list|" . base_url("daftar-komik")];
+
+
 ?>
 
 
@@ -179,12 +183,24 @@ $my_path = get_url_cover();
             </button>
             <div class="collapse navbar-collapse" id="collapsibleNavId">
                <ul class="navbar-nav mt-2 mt-lg-0">
-                  <li class="nav-item active">
-                     <a class="nav-link" href="<?= base_url() ?>"><i class="fa fa-home" aria-hidden="true"></i><span class="sr-only">(current)</span> <span>Beranda</span></a>
-                  </li>
-                  <li class="nav-item">
-                     <a class="nav-link" href="comic_lists.html"><i class="fa fa-th-list" aria-hidden="true"></i><span class="sr-only">(current)</span> <span>Daftar Komik</span></a>
-                  </li>
+
+                  <?php foreach ($menu as $menu_name => $menu_value) : ?>
+                     <?php
+                     $arra_value =  explode("|", $menu_value);
+                     $menu_icon  =  $arra_value[0];
+                     $menu_url   =  $arra_value[1];
+                     ?>
+                     <?php if ($menu_name === $title) : ?>
+                        <li class="nav-item active">
+                           <a class="nav-link" href="<?= $menu_url ?>"><i class="fa <?= $menu_icon ?>" aria-hidden="true"></i><span class="sr-only"></span> <span><?= $menu_name ?></span></a>
+                        </li>
+                     <?php else : ?>
+                        <li class="nav-item">
+                           <a class="nav-link" href="<?= $menu_url ?>"><i class="fa <?= $menu_icon ?>" aria-hidden="true"></i><span class="sr-only"></span> <span><?= $menu_name ?></span></a>
+                        </li>
+                     <?php endif; ?>
+
+                  <?php endforeach; ?>
                </ul>
 
 

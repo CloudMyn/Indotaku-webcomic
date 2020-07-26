@@ -17,7 +17,7 @@ class Comic_Controller extends CI_Controller
    {
       parent::__construct();
       $this->load->model("Comic/Comic_model", "comic");
-      $this->load->model("Components/Components", "comps");
+      $this->load->library("components","", "comps");
    }
 
    public function get_comic($comic_slug)

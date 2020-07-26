@@ -78,6 +78,48 @@ class Comic_model extends CI_Model
 
 
    /**
+    * -----------------------------------
+    * Get All Comic Data With Status Is 1
+    * -----------------------------------
+    * @return      array[object]
+    */
+   public function get_comic_limit($keyword = "", $limit, $offset): array
+   {
+      $this->load->helper("model");
+      $this->db->order_by("comic_update", "DESC");
+      if ($keyword !== "") {
+         $this->db->like("comic_name", $keyword, "after");
+         $this->db->or_like("comic_author", $keyword, "after");
+      }
+      $this->db->select("`comic_name`, `comic_cover`, `comic_slug`, `comic_status`, `comic_type`");
+      $lists_array = $this->db->get_where($this->_comic_table, $this->_active_comic, $limit, $offset)->result_array();
+      return $this->_array_to_obj($lists_array);
+   }
+
+
+
+   /**
+    * ------------------ getLatestComicQuery() ------------------
+    *  Berfungsi Unutk Mengambil Jumlah Comic Yang Diquery 
+    *  Terahkir Kali.
+    *  @param  String      Keyword Pencarian
+    *  @return int         Total Komik
+    */
+   public function getLatestComicQuery(String $keyword = null)
+   {
+
+      if ($keyword !== NULL) {
+         $this->db->like("comic_name", $keyword, "after");
+         $this->db->or_like("comic_author", $keyword, "after");
+      }
+
+      $this->db->from($this->_comic_table);
+      return $this->db->count_all_results();
+   }
+
+
+
+   /**
     * 
     *  -----------------------------------------------------------------------------------------
     *                               PRIVATE FUNCTION IS DOWN HERE

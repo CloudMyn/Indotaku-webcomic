@@ -73,6 +73,7 @@ function get_alias_ch(string $chapter_name): string
 
                </div>
 
+               <?= $this->pagination->create_links() ?>
             </div>
 
          </div>
@@ -121,10 +122,10 @@ function get_alias_ch(string $chapter_name): string
                                  <div class="rank">
                                     <p class="rank-1"><?= $index ?></p>
                                  </div>
-                                 <a href="<?= base_url("komik/" . $comic->comic_slug)?>" class="r-series">
+                                 <a href="<?= base_url("komik/" . $comic->comic_slug) ?>" class="r-series">
                                     <img src="<?= $my_path . $comic->comic_cover ?>" alt="cover">
                                  </a>
-                                 <a href="<?= base_url("komik/" . $comic->comic_slug)?>" class="l-series">
+                                 <a href="<?= base_url("komik/" . $comic->comic_slug) ?>" class="l-series">
                                     <p class="max-lines set-lines-1 popular-title"><?= $comic->comic_name ?>
                                     </p>
                                     <p class="max-lines set-lines-2"><?= join(", ", $comic->comic_genre) ?>
@@ -140,10 +141,10 @@ function get_alias_ch(string $chapter_name): string
                               <div class="rank">
                                  <p class="top-ten-rank"><?= $index ?></p>
                               </div>
-                              <a href="<?= base_url("komik/" . $comic->comic_slug)?>" class="r-series">
+                              <a href="<?= base_url("komik/" . $comic->comic_slug) ?>" class="r-series">
                                  <img src="<?= $my_path . $comic->comic_cover ?>" alt="cover">
                               </a>
-                              <a href="<?= base_url("komik/" . $comic->comic_slug)?>" class="l-series">
+                              <a href="<?= base_url("komik/" . $comic->comic_slug) ?>" class="l-series">
                                  <p class="max-lines set-lines-1 popular-title text-secondary"> <?= $comic->comic_name ?></p>
                                  <p class="max-lines set-lines-3 text-secondary"><?= join(", ", $comic->comic_genre) ?></p>
                                  <p class="max-lines set-lines-1 text-secondary type"><?= $comic->comic_type ?></p>

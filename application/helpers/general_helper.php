@@ -37,3 +37,8 @@ function get_active_table($active_server): array
    $ci = get_instance();
    return $ci->db->get_where("_komik_ws", ["ws_komik_name" => $active_server])->row_array();
 }
+
+
+function get_user_data(){
+   return false;
+}

@@ -54,6 +54,8 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 $route["home"] = "Home_Controller/index";
+$route["page"] = "Home_Controller/index";
+$route["page/([0-9]*)"] = "Home_Controller/index/$1";
 $route["chapter/([a-zA-Z 0-9 \-.]*)"] = "Comic_controller/get_comic_chapter/$1";
 $route["komik/([a-zA-Z 0-9 \-]*)"] =   function ($comic_slug) {
    return 'comic_controller/get_comic/' . $comic_slug;

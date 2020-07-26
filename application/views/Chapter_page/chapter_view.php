@@ -10,6 +10,10 @@ $my_path = get_url_cover();
 
 $menu = ["Beranda" => "fa-home|" . base_url(), "Daftar Komik" => "fa-th-list|" . base_url("daftar-komik")];
 
+$this->load->model("Comic/Comic_model", "comic");
+$this->load->helper("model");
+$chapters = $this->comic->get_comic_chapter($chapter->comic_slug);
+$chapters = array_reverse($chapters);
 
 ?>
 
@@ -22,7 +26,7 @@ $menu = ["Beranda" => "fa-home|" . base_url(), "Daftar Komik" => "fa-th-list|" .
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <meta http-equiv="X-UA-Compatible" content="ie=edge">
    <meta name="description" content="...must be filled to optimized the seo">
-   <title><?= $title ?></title>
+   <title><?= strtolower($title) ?></title>
 
    <link rel="stylesheet" href="<?= base_url() ?>assets/css/style.css">
    <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap.min.css">
@@ -230,28 +234,22 @@ $menu = ["Beranda" => "fa-home|" . base_url(), "Daftar Komik" => "fa-th-list|" .
             <div class="box-right">
 
                <select name="select-chapter" id="select-chapter" onchange="to(this)">
-                  <option value="7">Chapter 7</option>
-                  <option value="6">Chapter 6</option>
-                  <option value="5">Chapter 5</option>
-                  <option value="4">Chapter 4</option>
-                  <option value="3">Chapter 3</option>
-                  <option value="2">Chapter 2</option>
-                  <option selected value="1">Chapter 1</option>
+                  <?php $index = 1; ?>
+                  <?php foreach ($chapters as $chap) : ?>
+                     <?php if ($chap->chapter_slug === $chapter->chapter_slug) : ?>
+                        <option class="c-items" id="selected-item" data-index="<?= $index++ ?>" value="<?= base_url("chapter/" . $chap->chapter_slug) ?>" selected><?= $chap->chapter_name ?></option>
+                     <?php else : ?>
+                        <option class="c-items" data-index="<?= $index++ ?>" value="<?= base_url("chapter/" . $chap->chapter_slug) ?>"><?= $chap->chapter_name ?></option>
+                     <?php endif; ?>
+                  <?php endforeach; ?>
                </select>
 
             </div>
 
-            <script>
-               function to(data) {
-                  console.log(data.value);
-                  let url = `chapter_page.html?chapter-${data.value}`;
-                  document.location.replace(url)
-               }
-            </script>
 
             <div class="btn-chp">
-               <a href="#pref" class="prev">« Previous Chapter</a>
-               <a href="#next" class="prev">Next Chapter »</a>
+               <a href="#pref" class="prev-chapter">« Previous Chapter</a>
+               <a href="#next" class="next-chapter">Next Chapter »</a>
             </div>
 
             <div class="box-left">
@@ -276,8 +274,8 @@ $menu = ["Beranda" => "fa-home|" . base_url(), "Daftar Komik" => "fa-th-list|" .
 
 
          <div class="btn-chp mt-2 px-2">
-            <a href="#pref" class="prev">« Previous Chapter</a>
-            <a href="#next" class="prev">Next Chapter »</a>
+            <a href="#pref" class="prev-chapter">« Previous Chapter</a>
+            <a href="#next" class="next-chapter">Next Chapter »</a>
          </div>
 
 
@@ -304,9 +302,12 @@ $menu = ["Beranda" => "fa-home|" . base_url(), "Daftar Komik" => "fa-th-list|" .
          <h5><?= date("Y") ?> inOtaku.com - All Right Reserved</h5>
       </div>
    </footer>
+
+
    <script>
       const chapter_box = document.getElementById("chapter-box");
-      const chapterLists = <?= json_encode($chapter->chapter_images) ?>;
+      // const chapterLists = <?php //json_encode($chapter->chapter_images) 
+                              ?>;
 
       // setTimeout(generateComicChapter, 1500)
 
@@ -325,12 +326,47 @@ $menu = ["Beranda" => "fa-home|" . base_url(), "Daftar Komik" => "fa-th-list|" .
          // chapter_box.innerHTML = "";
          chapter_box.innerHTML = allChapters;
       }
+
+      // To Redirect
+      function to(data) {
+         document.location.replace(data.value);
+      }
    </script>
 
    <script src="<?= base_url() ?>/assets/js/jquery-3.3.1.slim.min.js"></script>
    <script src="<?= base_url() ?>/assets/js/popper.min.js"></script>
    <script src="<?= base_url() ?>/assets/js/bootstrap.min.js"></script>
    <script src="<?= base_url() ?>/assets/js/main.js"></script>
+
+   <script>
+      // Check Previos And Next Chapters
+      // const current_chapter = $("#select-chapter").data("index");
+      const all_chapters = document.getElementsByClassName("c-items");
+      const selected_item_element = document.getElementById("selected-item");
+      const selected_item_number = parseInt(selected_item_element.getAttribute("data-index"));
+      const prev_btn = document.getElementsByClassName("prev-chapter");
+      const next_btn = document.getElementsByClassName("next-chapter");
+      const prev_chapter_number = selected_item_number - 1;
+      const next_chapter_number = selected_item_number + 1;
+      let prev_chapter_url, next_chapter_url;
+
+      // console.log(all_chapters);
+      for (index in all_chapters) {
+         let e = all_chapters[index].getAttribute("data-index");
+         if (isNaN(parseInt(e))) continue;
+
+         if (parseInt(e) == prev_chapter_number) {
+            prev_chapter_url = all_chapters[index].getAttribute("value");
+            prev_btn[0].setAttribute("href", prev_chapter_url);
+            prev_btn[1].setAttribute("href", prev_chapter_url);
+         } else if(parseInt(e) == next_chapter_number) {
+            next_chapter_url = all_chapters[index].getAttribute("value");
+            next_btn[0].setAttribute("href", next_chapter_url);
+            next_btn[1].setAttribute("href", next_chapter_url);
+         }
+
+      }
+   </script>
 </body>
 
 </html>

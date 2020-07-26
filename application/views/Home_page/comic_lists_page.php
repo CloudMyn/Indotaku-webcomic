@@ -54,7 +54,20 @@ function get_alias_ch(string $chapter_name): string
                                         $this->load->model("Comic/Comic_model.php", "comic");
                                         $this->load->helper("model");
                                         $x3_chaps = $this->comic->get_limit_chapter($data->comic_slug, 3);
-                                        ?>
+                                        ?> <?php if ($x3_chaps === NULL or $x3_chaps === []) : ?>
+                                            <span class="chapter-list" style="visibility: hidden;">
+                                                <a class="text-decoration-none">-- none -- </a>
+                                                <p>-none-</p>
+                                            </span>
+                                            <span class="chapter-list" style="visibility: hidden;">
+                                                <a class="text-decoration-none">-- none -- </a>
+                                                <p>-none-</p>
+                                            </span>
+                                            <span class="chapter-list" style="visibility: hidden;">
+                                                <a class="text-decoration-none">-- none -- </a>
+                                                <p>-none-</p>
+                                            </span>
+                                        <?php endif; ?>
                                         <?php foreach ($x3_chaps as $chapter) : ?>
                                             <span class="chapter-list">
                                                 <a href="<?= base_url("chapter/" . $chapter->chapter_slug) ?>" class="text-decoration-none"><?= get_alias_ch($chapter->chapter_name) ?></a>
@@ -104,7 +117,7 @@ function get_alias_ch(string $chapter_name): string
 
 
 
-              
+
             </div>
 
 

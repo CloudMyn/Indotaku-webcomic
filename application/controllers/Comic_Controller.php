@@ -17,7 +17,7 @@ class Comic_Controller extends CI_Controller
    {
       parent::__construct();
       $this->load->model("Comic/Comic_model", "comic");
-      $this->load->library("components","", "comps");
+      $this->load->library("components", "", "comps");
    }
 
    public function get_comic($comic_slug)
@@ -38,7 +38,7 @@ class Comic_Controller extends CI_Controller
    {
       if (!$chapter_slug) to("Home");
 
-      $data["title"]       =  "Comic Title";
+      $data["title"]       =  "Baca " . replace($chapter_slug) . " Bahasa Indonesia";
       $data["chapter"]     =  $this->comic->get_chapter($chapter_slug);
       $this->load->view("Chapter_page/chapter_view.php", $data);
    }

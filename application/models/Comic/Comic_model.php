@@ -42,13 +42,13 @@ class Comic_model extends CI_Model
       return new Chapter($result_data);
    }
 
-   public function get_limit_chapter($comic_slug, $limit)
+   public function get_limit_chapter($comic_slug, $limit) : array
    {
       $this->db->select("comic_slug, chapter_slug, chapter_name, chapter_date");
       $this->db->order_by("chapter_id", "DESC");
       $this->db->order_by("chapter_slug", "ASC");
       $array = $this->db->get_where($this->_chapter_table, ["comic_slug" => $comic_slug], $limit)->result_array();
-      return $this->_array_to_obj($array, false);
+      return $this->_array_to_obj($array, false) ?? [];
    }
 
    public function get_comic_chapter(string $comic_slug)

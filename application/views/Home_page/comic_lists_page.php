@@ -25,8 +25,15 @@ function get_alias_ch(string $chapter_name): string
 
                 <div class="sbox mb-3 box-shadow-min">
 
-                    <h2 class="text-main-color content-title">Daftar Komik</h2>
-                    <hr class="mb-3 mt-2">
+                    <div class="content-header m-0 p-0">
+                        <div class="ch-title">
+                            <h2 class="text-main-color content-title">Daftar Komik</h2>
+                        </div>
+                        <div class="ch-action">
+                            <button class="btn-filter"> <i class="fa fa-fw fa-filter"></i> </button>
+                        </div>
+                    </div>
+                    <hr class="mb-3 mt-1">
                     <div class="bxcontent">
 
                         <?php foreach ($comic_model as $data) { ?>

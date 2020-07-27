@@ -340,26 +340,22 @@ $chapters = array_reverse($chapters);
 
    <script>
       // Check Previos And Next Chapters
-      // const current_chapter = $("#select-chapter").data("index");
       const all_chapters = document.getElementsByClassName("c-items");
       const selected_item_element = document.getElementById("selected-item");
       const selected_item_number = parseInt(selected_item_element.getAttribute("data-index"));
       const prev_btn = document.getElementsByClassName("prev-chapter");
       const next_btn = document.getElementsByClassName("next-chapter");
-      const prev_chapter_number = selected_item_number - 1;
-      const next_chapter_number = selected_item_number + 1;
-      let prev_chapter_url, next_chapter_url;
 
       // console.log(all_chapters);
       for (index in all_chapters) {
          let e = all_chapters[index].getAttribute("data-index");
          if (isNaN(parseInt(e))) continue;
 
-         if (parseInt(e) == prev_chapter_number) {
+         if (parseInt(e) == selected_item_number - 1) {
             prev_chapter_url = all_chapters[index].getAttribute("value");
             prev_btn[0].setAttribute("href", prev_chapter_url);
             prev_btn[1].setAttribute("href", prev_chapter_url);
-         } else if(parseInt(e) == next_chapter_number) {
+         } else if (parseInt(e) == selected_item_number + 1) {
             next_chapter_url = all_chapters[index].getAttribute("value");
             next_btn[0].setAttribute("href", next_chapter_url);
             next_btn[1].setAttribute("href", next_chapter_url);

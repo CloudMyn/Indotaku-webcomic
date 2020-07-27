@@ -3,7 +3,10 @@
 
 $my_path = get_url_cover();
 
-
+$csrf = array(
+    'name' => $this->security->get_csrf_token_name(),
+    'hash' => $this->security->get_csrf_hash()
+);
 
 function get_alias_ch(string $chapter_name): string
 {
@@ -30,7 +33,8 @@ function get_alias_ch(string $chapter_name): string
                             <h2 class="text-main-color content-title">Daftar Komik</h2>
                         </div>
                         <div class="ch-action">
-                            <button class="btn-filter"> <i class="fa fa-fw fa-filter"></i> </button>
+                            <button class="btn-filter" data-toggle="modal" data-target="#exampleModalCenter"> <i class="fa fa-fw fa-filter"></i> </button>
+
                         </div>
                     </div>
                     <hr class="mb-3 mt-1">
@@ -134,3 +138,94 @@ function get_alias_ch(string $chapter_name): string
 
     </div>
 </section>
+
+<?php
+
+$filter_options = [];
+
+?>
+
+<script>
+    $(window).ready(() => {
+        $('#exampleModalCenter').modal('show');
+    })
+</script>
+
+<form method="post" action="">
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Comic Filter</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row my-2 no-gutters">
+                        <label for="order-by" class="col-sm-4 col-form-label text-left">Order By</label>
+                        <div class="col-sm-8">
+                            <select class="custom-select mr-sm-2" id="order-by" name="order-by">
+                                <option value="name"> -- name -- </option>
+                                <option value="visited"> -- popular -- </option>
+                                <option value="like"> -- like -- </option>
+                                <option value="dislike"> -- dislike -- </option>
+                                <option value="chapters"> -- total chapters -- </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row my-2 no-gutters">
+                        <label for="urutan" class="col-sm-4 col-form-label text-left">Direction</label>
+                        <div class="col-sm-8">
+                            <select class="custom-select mr-sm-2" id="urutan" name="urutan">
+                                <option value="ASC"> -- ASC --</option>
+                                <option value="DESC"> -- DESC --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row my-2 no-gutters">
+                        <label for="type" class="col-sm-4 col-form-label text-left">Comic type</label>
+                        <div class="col-sm-8">
+                            <select class="custom-select mr-sm-2" id="type" name="type">
+                                <option value="all" selected> -- All -- </option>
+                                <option value="manga"> -- Manga -- </option>
+                                <option value="manhua"> -- Manhua -- </option>
+                                <option value="manhwa"> -- Manhwa -- </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row my-2 no-gutters">
+                        <label for="status" class="col-sm-4 col-form-label text-left">Comic Status</label>
+                        <div class="col-sm-8">
+                            <select class="custom-select mr-sm-2" id="status" name="status">
+                                <option value="all" selected> -- All -- </option>
+                                <option value="1"> -- Ongoing -- </option>
+                                <option value="0"> -- Ended -- </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="my-2">
+                        <label for="genre" class="col-form-label text-center text-uppercase font-weight-bold">Comic Genre</label>
+                        <div id="select-genre">
+                            <?php foreach ($genres as $genre) : ?>
+                                <div class="genre">
+                                    <div>
+                                        <input class="" type="checkbox" name="genres[]" id="<?= $genre["genre"] ?>" value="<?= $genre["name"] ?>">
+                                    </div>
+                                    <label class="label" class="m-0 p-0" for="<?= $genre["genre"] ?>"><?= $genre["genre"] ?></label>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                    <input type="hidden" name="<?= $csrf['name']; ?>" value="<?= $csrf['hash']; ?>" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" name="submit-button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

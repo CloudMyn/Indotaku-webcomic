@@ -80,6 +80,11 @@ class Home_Controller extends CI_Controller
     public function comic_lists()
     {
 
+        if (isset($_POST["submit-button"])) {
+            var_dump($this->input->post());
+            die;
+        }
+
         /**
          * ------------------------------------
          *       Config For Pagination 
@@ -126,7 +131,7 @@ class Home_Controller extends CI_Controller
 
 
         $data["start"]          = ($config["total_rows"] <= $config["per_page"]) ? 0 : $this->uri->segment(2);
-        $data["comic_model"]    = $this->comic->get_comic_limit($config["per_page"], $data["start"], "", "comic_name","ASC");
+        $data["comic_model"]    = $this->comic->get_comic_limit($config["per_page"], $data["start"], "", "comic_name", "ASC");
 
 
         get_views("Home_page/comic_lists_page.php", $data);

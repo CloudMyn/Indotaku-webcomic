@@ -102,6 +102,9 @@
 
       /* ---------------------------------- End Header & Nav Style ---------------------------------- */
    </style>
+
+
+   <script src="<?= base_url() ?>/assets/js/jquery-3.3.1.slim.min.js"></script>
 </head>
 
 <body>

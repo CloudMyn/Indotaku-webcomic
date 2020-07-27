@@ -39,7 +39,8 @@ function get_active_table($active_server): array
 }
 
 
-function get_user_data(){
+function get_user_data()
+{
    return false;
 }
 
@@ -47,30 +48,48 @@ function get_user_data(){
 
 function time_elapsed_string($datetime, $full = false)
 {
-    $now = new DateTime;
-    $ago = new DateTime("@" . $datetime);
-    $diff = $now->diff($ago);
+   $now = new DateTime;
+   $ago = new DateTime("@" . $datetime);
+   $diff = $now->diff($ago);
 
-    $diff->w = floor($diff->d / 7);
-    $diff->d -= $diff->w * 7;
+   $diff->w = floor($diff->d / 7);
+   $diff->d -= $diff->w * 7;
 
-    $string = array(
-        'y' => 'year',
-        'm' => 'month',
-        'w' => 'week',
-        'd' => 'day',
-        'h' => 'hour',
-        'i' => 'minute',
-        's' => 'second',
-    );
-    foreach ($string as $k => &$v) {
-        if ($diff->$k) {
-            $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
-        } else {
-            unset($string[$k]);
-        }
-    }
+   $string = array(
+      'y' => 'year',
+      'm' => 'month',
+      'w' => 'week',
+      'd' => 'day',
+      'h' => 'hour',
+      'i' => 'minute',
+      's' => 'second',
+   );
+   foreach ($string as $k => &$v) {
+      if ($diff->$k) {
+         $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+      } else {
+         unset($string[$k]);
+      }
+   }
 
-    if (!$full) $string = array_slice($string, 0, 1);
-    return $string ? implode(', ', $string) . ' ago' : 'just now';
+   if (!$full) $string = array_slice($string, 0, 1);
+   return $string ? implode(', ', $string) . ' ago' : 'just now';
+}
+
+
+/**
+ * This Function Will Find Matches string and return it
+ * 
+ * @param   array|string target_match
+ * @param   string   value
+ * @return  bool|string
+ */
+function find_matches($target_match, string $string)
+{
+   $value = $target_match;
+   if (is_array($target_match)) {
+      $value   =  join("|", $target_match);
+   }
+   $result  =  preg_match("/^($value)*$/", $string);
+   return ($result === 0) ? false : $string;
 }

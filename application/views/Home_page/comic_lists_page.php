@@ -147,7 +147,7 @@ $filter_options = [];
 
 <script>
     $(window).ready(() => {
-        $('#exampleModalCenter').modal('show');
+        // $('#exampleModalCenter').modal('show');
     })
 </script>
 
@@ -176,9 +176,9 @@ $filter_options = [];
                         </div>
                     </div>
                     <div class="form-group row my-2 no-gutters">
-                        <label for="urutan" class="col-sm-4 col-form-label text-left">Direction</label>
+                        <label for="direction" class="col-sm-4 col-form-label text-left">Direction</label>
                         <div class="col-sm-8">
-                            <select class="custom-select mr-sm-2" id="urutan" name="urutan">
+                            <select class="custom-select mr-sm-2" id="direction" name="direction">
                                 <option value="ASC"> -- ASC --</option>
                                 <option value="DESC"> -- DESC --</option>
                             </select>
@@ -188,7 +188,7 @@ $filter_options = [];
                         <label for="type" class="col-sm-4 col-form-label text-left">Comic type</label>
                         <div class="col-sm-8">
                             <select class="custom-select mr-sm-2" id="type" name="type">
-                                <option value="all" selected> -- All -- </option>
+                                <option value="" selected> -- All -- </option>
                                 <option value="manga"> -- Manga -- </option>
                                 <option value="manhua"> -- Manhua -- </option>
                                 <option value="manhwa"> -- Manhwa -- </option>
@@ -199,7 +199,7 @@ $filter_options = [];
                         <label for="status" class="col-sm-4 col-form-label text-left">Comic Status</label>
                         <div class="col-sm-8">
                             <select class="custom-select mr-sm-2" id="status" name="status">
-                                <option value="all" selected> -- All -- </option>
+                                <option value="" selected> -- All -- </option>
                                 <option value="1"> -- Ongoing -- </option>
                                 <option value="0"> -- Ended -- </option>
                             </select>

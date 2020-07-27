@@ -66,7 +66,9 @@ class Home_Controller extends CI_Controller
 
 
         $data["start"]          = ($config["total_rows"] <= $config["per_page"]) ? 0 : $this->uri->segment(2);
-        $data["comic_model"]         = $this->comic->get_comic_limit($config["per_page"], $data["start"]);
+        $model_data["offset"]   =   $data["start"];
+        $model_data["limit"]    =   $config["per_page"];
+        $data["comic_model"]         = $this->comic->get_comic_limit($model_data);
 
 
         $data["title"]          =   "Beranda";
@@ -79,12 +81,6 @@ class Home_Controller extends CI_Controller
 
     public function comic_lists()
     {
-
-        if (isset($_POST["submit-button"])) {
-            var_dump($this->input->post());
-            die;
-        }
-
         /**
          * ------------------------------------
          *       Config For Pagination 
@@ -129,11 +125,46 @@ class Home_Controller extends CI_Controller
          *  Ambil Comic Dari Comic Model Dengan Method get_comic_limit()
          */
 
+        $model_data =   $this->_advance_filter_system();
 
         $data["start"]          = ($config["total_rows"] <= $config["per_page"]) ? 0 : $this->uri->segment(2);
-        $data["comic_model"]    = $this->comic->get_comic_limit($config["per_page"], $data["start"], "", "comic_name", "ASC");
+
+        $model_data["offset"]       =   $data["start"];
+        $model_data["limit"]        =   $config["per_page"];
+        $data["comic_model"]    = $this->comic->get_comic_limit($model_data);
+
+
 
 
         get_views("Home_page/comic_lists_page.php", $data);
+    }
+
+    // Advance Filter
+    private function _advance_filter_system(): array
+    {
+
+        if (!isset($_POST["submit-button"])) return [];
+        $table_name         =   htmlspecialchars($this->input->post("order-by", true));
+        $comic_direction    =   htmlspecialchars($this->input->post("direction", true));
+        $comic_type         =   htmlspecialchars($this->input->post("type", true));
+
+        $allowed_name       =   "name|visited|like|dislike|chapters";
+        $allowed_direction  =   "ASC|DESC";
+        $allowed_type       =   "manga|manhua|manhwa";
+
+        $model_data["order_by"]         =   "comic_update";
+        $model_data["direction"]        =   "DESC";
+        $model_data["comic_type"]       =   "";
+        $model_data["comic_status"]     =   intval(htmlspecialchars($this->input->post("status", true)));
+        $model_data["comic_genre"]      =   html_escape($this->input->post("genres", true));
+
+        // validate Allowed Input
+        if (find_matches($allowed_name, $table_name)) $model_data["order_by"]   =  "comic_" . $table_name;
+        if (find_matches($allowed_direction, $comic_direction)) $model_data["direction"] =   $comic_direction;
+        if (find_matches($allowed_type, $comic_type)) $model_data["comic_type"]  =   $comic_type;
+
+        // var_dump($model_data);
+        // die;
+        return $model_data;
     }
 }

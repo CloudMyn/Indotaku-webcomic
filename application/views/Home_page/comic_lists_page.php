@@ -65,7 +65,8 @@ function get_alias_ch(string $chapter_name): string
                                         $this->load->model("Comic/Comic_model.php", "comic");
                                         $this->load->helper("model");
                                         $x3_chaps = $this->comic->get_limit_chapter($data->comic_slug, 3);
-                                        ?> <?php if ($x3_chaps === NULL or $x3_chaps === []) : ?>
+                                        ?>
+                                        <?php if ($x3_chaps === NULL or $x3_chaps === []) : ?>
                                             <span class="chapter-list" style="visibility: hidden;">
                                                 <a class="text-decoration-none">-- none -- </a>
                                                 <p>-none-</p>
@@ -82,7 +83,7 @@ function get_alias_ch(string $chapter_name): string
                                         <?php foreach ($x3_chaps as $chapter) : ?>
                                             <span class="chapter-list">
                                                 <a href="<?= base_url("chapter/" . $chapter->chapter_slug) ?>" class="text-decoration-none"><?= get_alias_ch($chapter->chapter_name) ?></a>
-                                                <p>2 hours ago</p>
+                                                <p><?= time_elapsed_string($chapter->chapter_date) ?></p>
                                             </span>
                                         <?php endforeach; ?>
                                     </span>
@@ -141,8 +142,10 @@ function get_alias_ch(string $chapter_name): string
 
 <?php
 
-$filter_options = [];
-
+$allowed_order_table = ["name", "visited", "like", "update", "chapters"];
+$allowed_direct =   ["ASC", "DESC"];
+$allowed_type =   ["manga", "manhua", "manhwa"];
+$current_status = $this->session->userdata("sss-comic-status") ?? 3;
 ?>
 
 <script>
@@ -167,11 +170,13 @@ $filter_options = [];
                         <label for="order-by" class="col-sm-4 col-form-label text-left">Order By</label>
                         <div class="col-sm-8">
                             <select class="custom-select mr-sm-2" id="order-by" name="order-by">
-                                <option value="name"> -- name -- </option>
-                                <option value="visited"> -- popular -- </option>
-                                <option value="like"> -- like -- </option>
-                                <option value="dislike"> -- dislike -- </option>
-                                <option value="chapters"> -- total chapters -- </option>
+                                <?php foreach ($allowed_order_table as $table_name) : ?>
+                                    <?php if ("comic_" . $table_name === $this->session->userdata("sss-order-by")) : ?>
+                                        <option value="<?= $table_name ?>" selected> -- <?= $table_name ?> -- </option>
+                                    <?php else : ?>
+                                        <option value="<?= $table_name ?>"> -- <?= $table_name ?> -- </option>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                     </div>
@@ -179,8 +184,13 @@ $filter_options = [];
                         <label for="direction" class="col-sm-4 col-form-label text-left">Direction</label>
                         <div class="col-sm-8">
                             <select class="custom-select mr-sm-2" id="direction" name="direction">
-                                <option value="ASC"> -- ASC --</option>
-                                <option value="DESC"> -- DESC --</option>
+                                <?php foreach ($allowed_direct as $direction) : ?>
+                                    <?php if ($direction === $this->session->userdata("sss-direction")) : ?>
+                                        <option value="<?= $direction ?>" selected> -- <?= $direction ?> -- </option>
+                                    <?php else : ?>
+                                        <option value="<?= $direction ?>"> -- <?= $direction ?> -- </option>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                     </div>
@@ -188,10 +198,14 @@ $filter_options = [];
                         <label for="type" class="col-sm-4 col-form-label text-left">Comic type</label>
                         <div class="col-sm-8">
                             <select class="custom-select mr-sm-2" id="type" name="type">
-                                <option value="" selected> -- All -- </option>
-                                <option value="manga"> -- Manga -- </option>
-                                <option value="manhua"> -- Manhua -- </option>
-                                <option value="manhwa"> -- Manhwa -- </option>
+                                <option value=""> -- All -- </option>
+                                <?php foreach ($allowed_type as $comic_type) : ?>
+                                    <?php if ($comic_type === $this->session->userdata("sss-comic-type")) : ?>
+                                        <option value="<?= $comic_type ?>" selected> -- <?= $comic_type ?> -- </option>
+                                    <?php else : ?>
+                                        <option value="<?= $comic_type ?>"> -- <?= $comic_type ?> -- </option>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                     </div>
@@ -199,9 +213,19 @@ $filter_options = [];
                         <label for="status" class="col-sm-4 col-form-label text-left">Comic Status</label>
                         <div class="col-sm-8">
                             <select class="custom-select mr-sm-2" id="status" name="status">
-                                <option value="" selected> -- All -- </option>
-                                <option value="1"> -- Ongoing -- </option>
-                                <option value="0"> -- Ended -- </option>
+                                <?php if (0 == $current_status) : ?>
+                                    <option value="2"> -- All -- </option>
+                                    <option value="1"> -- OnGoing -- </option>
+                                    <option value="0" selected> -- Ended -- </option>
+                                <?php elseif (1 == $current_status) : ?>
+                                    <option value="2"> -- All -- </option>
+                                    <option value="1" selected> -- OnGoing -- </option>
+                                    <option value="0"> -- Ended -- </option>
+                                <?php else : ?>
+                                    <option value="3" selected> -- All -- </option>
+                                    <option value="1"> -- OnGoing -- </option>
+                                    <option value="0"> -- Ended -- </option>
+                                <?php endif; ?>
                             </select>
                         </div>
                     </div>
@@ -222,6 +246,7 @@ $filter_options = [];
                     <input type="hidden" name="<?= $csrf['name']; ?>" value="<?= $csrf['hash']; ?>" />
                 </div>
                 <div class="modal-footer">
+                    <a href="<?= base_url("clear-filter") ?>" class="btn btn-secondary">Clear</a>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" name="submit-button" class="btn btn-primary">Save changes</button>
                 </div>

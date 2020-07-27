@@ -53,9 +53,13 @@ $route['default_controller'] = 'Home_Controller';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
+
 $route["home"] = "Home_Controller/index";
 $route["s-f"] = "Home_Controller/index";
 $route["s-f/([0-9]*)"] = "Home_Controller/index/$1";
+
+
+$route["clear-filter"] = "Home_Controller/clear_filter_session";
 
 $route["daftar-komik"] = "Home_Controller/comic_lists";
 $route["daftar-komik/s-f"] = "Home_Controller/comic_lists";

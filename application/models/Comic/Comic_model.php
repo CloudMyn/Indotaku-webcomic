@@ -123,8 +123,25 @@ class Comic_model extends CI_Model
     *  @param  String      Keyword Pencarian
     *  @return int         Total Komik
     */
-   public function getLatestComicQuery(String $keyword = "")
+   public function getLatestComicQuery(array $data = [])
    {
+      if (@$data["comic_type"] && @$data["comic_status"] && @$data["comic_genre"]) {
+         $this->db->where("comic_type", $data["comic_type"], true);
+         $this->db->where("comic_status", intval($data["comic_status"]), true);
+         $genres = $data["comic_genre"] ?? [];
+         foreach ($genres as $genre) {
+            $this->db->like("comic_genres", $genre);
+         }
+      }
+
+
+      $keyword       =  $data["keyword"] ?? "";
+      $order_by      =  @$data["order_by"] ?? "comic_update";
+      $ordering      =  @$data["direction"] ?? "DESC";
+
+
+      $this->load->helper("model");
+      $this->db->order_by($order_by, $ordering);
 
       if ($keyword !== "") {
          $this->db->like("comic_name", $keyword, "after");

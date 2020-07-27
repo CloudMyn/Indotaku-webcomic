@@ -82,6 +82,14 @@ class Home_Controller extends CI_Controller
     public function comic_lists()
     {
         /**
+         * Check Filter Session
+         */
+
+        $model_data =   $this->_advance_filter_system();
+        if ($this->session->userdata("sss-order-by")) {
+            $model_data = $this->_get_filter_session();
+        }
+        /**
          * ------------------------------------
          *       Config For Pagination 
          * ------------------------------------
@@ -93,7 +101,7 @@ class Home_Controller extends CI_Controller
         $config["last_link"]    = "last";                   // Tombol Akhir Pagination
         $config["base_url"]     = base_url("daftar-komik/s-f");  // Set Halaman Yang Akan Di Pasangkan Pagination
         // $config["total_rows"]   = 0;
-        $config["total_rows"]   = $this->comic->getLatestComicQuery(); // Total Baris Diamil Dari getLatestComicQuery()
+        $config["total_rows"]   = $this->comic->getLatestComicQuery($model_data); // Total Baris Diamil Dari getLatestComicQuery()
         // Load Dan Init Semua Konfigurasi Pagination
         $this->pagination->initialize($config);
 
@@ -125,16 +133,12 @@ class Home_Controller extends CI_Controller
          *  Ambil Comic Dari Comic Model Dengan Method get_comic_limit()
          */
 
-        $model_data =   $this->_advance_filter_system();
 
         $data["start"]          = ($config["total_rows"] <= $config["per_page"]) ? 0 : $this->uri->segment(2);
 
         $model_data["offset"]       =   $data["start"];
         $model_data["limit"]        =   $config["per_page"];
         $data["comic_model"]    = $this->comic->get_comic_limit($model_data);
-
-
-
 
         get_views("Home_page/comic_lists_page.php", $data);
     }
@@ -145,10 +149,10 @@ class Home_Controller extends CI_Controller
 
         if (!isset($_POST["submit-button"])) return [];
         $table_name         =   htmlspecialchars($this->input->post("order-by", true));
-        $comic_direction    =   htmlspecialchars($this->input->post("direction", true));
+        $current_direction  =   htmlspecialchars($this->input->post("direction", true));
         $comic_type         =   htmlspecialchars($this->input->post("type", true));
 
-        $allowed_name       =   "name|visited|like|dislike|chapters";
+        $allowed_name       =   "name|visited|like|chapters|update";
         $allowed_direction  =   "ASC|DESC";
         $allowed_type       =   "manga|manhua|manhwa";
 
@@ -160,11 +164,36 @@ class Home_Controller extends CI_Controller
 
         // validate Allowed Input
         if (find_matches($allowed_name, $table_name)) $model_data["order_by"]   =  "comic_" . $table_name;
-        if (find_matches($allowed_direction, $comic_direction)) $model_data["direction"] =   $comic_direction;
+        if (find_matches($allowed_direction, $current_direction)) $model_data["direction"] =   $current_direction;
         if (find_matches($allowed_type, $comic_type)) $model_data["comic_type"]  =   $comic_type;
 
+        $this->session->set_userdata("sss-order-by", $model_data["order_by"]);
+        $this->session->set_userdata("sss-direction", $model_data["direction"]);
+        $this->session->set_userdata("sss-comic-type", $model_data["comic_type"]);
+        $this->session->set_userdata("sss-comic-status", $model_data["comic_status"]);
+        $this->session->set_userdata("sss-comic-genre", $model_data["comic_genre"]);
         // var_dump($model_data);
         // die;
         return $model_data;
+    }
+
+    private function _get_filter_session(): array
+    {
+        $sfd["order_by"] =  $this->session->userdata("sss-order-by");
+        $sfd["direction"] =  $this->session->userdata("sss-direction");
+        $sfd["comic_type"] = $this->session->userdata("sss-comic-type");
+        $sfd["comic_status"] =  $this->session->userdata("sss-comic-status");
+        $sfd["comic_genre"] = $this->session->userdata("sss-comic-genre");
+        return $sfd;
+    }
+
+    public function clear_filter_session()
+    {
+        $this->session->unset_userdata("sss-order-by");
+        $this->session->unset_userdata("sss-direction");
+        $this->session->unset_userdata("sss-comic-type");
+        $this->session->unset_userdata("sss-comic-status");
+        $this->session->unset_userdata("sss-comic-genre");
+        redirect("daftar-komik");
     }
 }

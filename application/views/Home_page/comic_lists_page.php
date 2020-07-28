@@ -24,7 +24,7 @@ function get_alias_ch(string $chapter_name): string
         <div class="mp-bigbox">
 
             <!-- New Updates -->
-            <div class="mp-box-left">
+            <div class="mp-box-left w-100">
 
                 <div class="sbox mb-3 box-shadow-min">
 
@@ -39,6 +39,12 @@ function get_alias_ch(string $chapter_name): string
                     </div>
                     <hr class="mb-3 mt-1">
                     <div class="bxcontent">
+
+                        <?php if ($results == 0) : ?>
+                            <div class="alert alert-warning w-100" role="alert">
+                                Komik Dengan Kriteria Tersebut Tidak <strong>Ditemukan!</strong>
+                            </div>
+                        <?php endif; ?>
 
                         <?php foreach ($comic_model as $data) { ?>
 
@@ -117,6 +123,32 @@ function get_alias_ch(string $chapter_name): string
 
                 <div class="sbox mb-3 box-shadow-min">
 
+                    <h2 class="text-main-color content-title text-center">Tempat Curhat</h2>
+                    <hr class="my-2">
+                    <!-- <script id="cid0020000256912115678" data-cfasync="false" async src="//st.chatango.com/js/gz/emb.js" style="width: 100%; height: 400px">
+                        {
+                            "handle": "inotaku-chat",
+                            "arch": "js",
+                            "styles": {
+                                "a": "fd7c54",
+                                "b": 100,
+                                "c": "000000",
+                                "d": "000000",
+                                "k": "fd7c54",
+                                "l": "fd7c54",
+                                "m": "fd7c54",
+                                "p": "10",
+                                "q": "fd7c54",
+                                "r": 100,
+                                "fwtickm": 1
+                            }
+                        }
+                    </script> -->
+
+                </div>
+
+                <div class="sbox mb-3 box-shadow-min">
+
                     <h2 class="text-main-color content-title text-center">Genre</h2>
                     <hr class="my-2">
                     <ul class="genre-ul">
@@ -142,10 +174,12 @@ function get_alias_ch(string $chapter_name): string
 
 <?php
 
-$allowed_order_table = ["name", "visited", "like", "update", "chapters"];
-$allowed_direct =   ["ASC", "DESC"];
+$allowed_order_table = ["name" => "Nama", "visited" => "Populer", "like" => "Favorite", "update" => "Update", "chapters" => "Chapter"];
+$allowed_direct =   ["ASC" => "A-Z or 0-9", "DESC" => "Z-A or 9-0"];
 $allowed_type =   ["manga", "manhua", "manhwa"];
-$current_status = $this->session->userdata("sss-comic-status") ?? 3;
+$current_status = $this->session->userdata("sss-comic-status") ?? [];
+$selected_genre = $this->session->userdata("sss-comic-genre") ?? [];
+$selected_genre = join("|", $selected_genre);
 ?>
 
 <script>
@@ -170,11 +204,11 @@ $current_status = $this->session->userdata("sss-comic-status") ?? 3;
                         <label for="order-by" class="col-sm-4 col-form-label text-left">Order By</label>
                         <div class="col-sm-8">
                             <select class="custom-select mr-sm-2" id="order-by" name="order-by">
-                                <?php foreach ($allowed_order_table as $table_name) : ?>
-                                    <?php if ("comic_" . $table_name === $this->session->userdata("sss-order-by")) : ?>
-                                        <option value="<?= $table_name ?>" selected> -- <?= $table_name ?> -- </option>
+                                <?php foreach ($allowed_order_table as $table_value => $table_name) : ?>
+                                    <?php if ("comic_" . $table_value === $this->session->userdata("sss-order-by")) : ?>
+                                        <option value="<?= $table_value ?>" selected> -- <?= $table_name ?> -- </option>
                                     <?php else : ?>
-                                        <option value="<?= $table_name ?>"> -- <?= $table_name ?> -- </option>
+                                        <option value="<?= $table_value ?>"> -- <?= $table_name ?> -- </option>
                                     <?php endif; ?>
                                 <?php endforeach; ?>
                             </select>
@@ -184,11 +218,11 @@ $current_status = $this->session->userdata("sss-comic-status") ?? 3;
                         <label for="direction" class="col-sm-4 col-form-label text-left">Direction</label>
                         <div class="col-sm-8">
                             <select class="custom-select mr-sm-2" id="direction" name="direction">
-                                <?php foreach ($allowed_direct as $direction) : ?>
+                                <?php foreach ($allowed_direct as $direction => $direction_name) : ?>
                                     <?php if ($direction === $this->session->userdata("sss-direction")) : ?>
-                                        <option value="<?= $direction ?>" selected> -- <?= $direction ?> -- </option>
+                                        <option value="<?= $direction ?>" selected> -- <?= $direction_name ?> -- </option>
                                     <?php else : ?>
-                                        <option value="<?= $direction ?>"> -- <?= $direction ?> -- </option>
+                                        <option value="<?= $direction ?>"> -- <?= $direction_name ?> -- </option>
                                     <?php endif; ?>
                                 <?php endforeach; ?>
                             </select>
@@ -198,7 +232,7 @@ $current_status = $this->session->userdata("sss-comic-status") ?? 3;
                         <label for="type" class="col-sm-4 col-form-label text-left">Comic type</label>
                         <div class="col-sm-8">
                             <select class="custom-select mr-sm-2" id="type" name="type">
-                                <option value=""> -- All -- </option>
+                                <option value="all"> -- All -- </option>
                                 <?php foreach ($allowed_type as $comic_type) : ?>
                                     <?php if ($comic_type === $this->session->userdata("sss-comic-type")) : ?>
                                         <option value="<?= $comic_type ?>" selected> -- <?= $comic_type ?> -- </option>
@@ -214,15 +248,15 @@ $current_status = $this->session->userdata("sss-comic-status") ?? 3;
                         <div class="col-sm-8">
                             <select class="custom-select mr-sm-2" id="status" name="status">
                                 <?php if (0 == $current_status) : ?>
-                                    <option value="2"> -- All -- </option>
+                                    <option value="all"> -- All -- </option>
                                     <option value="1"> -- OnGoing -- </option>
                                     <option value="0" selected> -- Ended -- </option>
                                 <?php elseif (1 == $current_status) : ?>
-                                    <option value="2"> -- All -- </option>
+                                    <option value="all"> -- All -- </option>
                                     <option value="1" selected> -- OnGoing -- </option>
                                     <option value="0"> -- Ended -- </option>
                                 <?php else : ?>
-                                    <option value="3" selected> -- All -- </option>
+                                    <option value="all" selected> -- All -- </option>
                                     <option value="1"> -- OnGoing -- </option>
                                     <option value="0"> -- Ended -- </option>
                                 <?php endif; ?>
@@ -234,12 +268,22 @@ $current_status = $this->session->userdata("sss-comic-status") ?? 3;
                         <label for="genre" class="col-form-label text-center text-uppercase font-weight-bold">Comic Genre</label>
                         <div id="select-genre">
                             <?php foreach ($genres as $genre) : ?>
-                                <div class="genre">
-                                    <div>
-                                        <input class="" type="checkbox" name="genres[]" id="<?= $genre["genre"] ?>" value="<?= $genre["name"] ?>">
+                                <?php if (find_matches($selected_genre, $genre["name"])) : ?>
+                                    <div class="genre">
+                                        <div>
+                                            <input checked type="checkbox" name="genres[]" id="<?= $genre["genre"] ?>" value="<?= $genre["name"] ?>">
+                                        </div>
+                                        <label class="label" class="m-0 p-0" for="<?= $genre["genre"] ?>"><?= $genre["genre"] ?></label>
                                     </div>
-                                    <label class="label" class="m-0 p-0" for="<?= $genre["genre"] ?>"><?= $genre["genre"] ?></label>
-                                </div>
+                                <?php else : ?>
+                                    <div class="genre">
+                                        <div>
+                                            <input type="checkbox" name="genres[]" id="<?= $genre["genre"] ?>" value="<?= $genre["name"] ?>">
+                                        </div>
+                                        <label class="label" class="m-0 p-0" for="<?= $genre["genre"] ?>"><?= $genre["genre"] ?></label>
+                                    </div>
+                                <?php endif; ?>
+
                             <?php endforeach; ?>
                         </div>
                     </div>

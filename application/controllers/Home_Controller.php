@@ -66,9 +66,11 @@ class Home_Controller extends CI_Controller
 
 
         $data["start"]          = ($config["total_rows"] <= $config["per_page"]) ? 0 : $this->uri->segment(2);
-        $model_data["offset"]   =   $data["start"];
-        $model_data["limit"]    =   $config["per_page"];
-        $data["comic_model"]         = $this->comic->get_comic_limit($model_data);
+        $model_data["order_by"]     =  "comic_update";
+        $model_data["direction"]    =   "DESC";
+        $model_data["offset"]       =   $data["start"];
+        $model_data["limit"]        =   $config["per_page"];
+        $data["comic_model"]        = $this->comic->get_comic_limit($model_data);
 
 
         $data["title"]          =   "Beranda";
@@ -86,16 +88,14 @@ class Home_Controller extends CI_Controller
          */
 
         $model_data =   $this->_advance_filter_system();
-        if ($this->session->userdata("sss-order-by")) {
-            $model_data = $this->_get_filter_session();
-        }
+
         /**
          * ------------------------------------
          *       Config For Pagination 
          * ------------------------------------
          */
         $this->load->library("pagination");                 // Load Library Pagination Dari CI
-        $config["per_page"]     = 21;                        // Jumlah Content Per Halaman
+        $config["per_page"]     = 18;                        // Jumlah Content Per Halaman
         $config['num_links']    = 2;                        // Jumlah Digit Tombol Pagination Di Kiri & Kanan
         $config["first_link"]   = "first";                  // Tombol Awal Pagination
         $config["last_link"]    = "last";                   // Tombol Akhir Pagination
@@ -105,6 +105,9 @@ class Home_Controller extends CI_Controller
         // Load Dan Init Semua Konfigurasi Pagination
         $this->pagination->initialize($config);
 
+        // var_dump($model_data);
+        // var_dump($config["total_rows"]);
+
         /**
          * ------------------------------------
          *          Data To Display
@@ -113,9 +116,8 @@ class Home_Controller extends CI_Controller
         $data["title"]          =   "Daftar Komik";
         $data["popular_comics"] =   $this->comps->get_popular_comics();
         $data["genres"]         =   $this->comps->get_all_genres();
-        $data["user_data"]      = get_user_data();               // - User Data Diambil Dari HelperFunction _getUserData()
-        $data["limit"]          = $config["per_page"];          // - Limit Merupakan Batasan Content Di Setiap Halaman
-        $data["totals_result"]  = $config["total_rows"];        // - Jumlah Hasil Dari Pencarian Comic
+        // $data["user_data"]      = get_user_data();               // - User Data Diambil Dari HelperFunction _getUserData()
+        $data["results"]        = $config["total_rows"];        // - Jumlah Hasil Dari Pencarian Comic
         /**
          * ------------ data['start'] ------------
          *  Merupakan  Content
@@ -134,7 +136,7 @@ class Home_Controller extends CI_Controller
          */
 
 
-        $data["start"]          = ($config["total_rows"] <= $config["per_page"]) ? 0 : $this->uri->segment(2);
+        $data["start"]          = ($config["total_rows"] <= $config["per_page"]) ? 0 : $this->uri->segment(3);
 
         $model_data["offset"]       =   $data["start"];
         $model_data["limit"]        =   $config["per_page"];
@@ -147,34 +149,45 @@ class Home_Controller extends CI_Controller
     private function _advance_filter_system(): array
     {
 
-        if (!isset($_POST["submit-button"])) return [];
-        $table_name         =   htmlspecialchars($this->input->post("order-by", true));
-        $current_direction  =   htmlspecialchars($this->input->post("direction", true));
-        $comic_type         =   htmlspecialchars($this->input->post("type", true));
+        if (isset($_POST["submit-button"])) {
+            $table_name         =   htmlspecialchars($this->input->post("order-by", true));
+            $current_direction  =   htmlspecialchars($this->input->post("direction", true));
+            $comic_type         =   htmlspecialchars($this->input->post("type", true));
+            $comic_status       =   htmlspecialchars($this->input->post("status", true) ?? NULL);
+            $comic_status       =   ($comic_status === "all") ? NULL : intval($comic_status);
 
-        $allowed_name       =   "name|visited|like|chapters|update";
-        $allowed_direction  =   "ASC|DESC";
-        $allowed_type       =   "manga|manhua|manhwa";
+            $allowed_name       =   "name|visited|like|chapters|update";
+            $allowed_direction  =   "ASC|DESC";
+            $allowed_type       =   "manga|manhua|manhwa";
 
-        $model_data["order_by"]         =   "comic_update";
-        $model_data["direction"]        =   "DESC";
-        $model_data["comic_type"]       =   "";
-        $model_data["comic_status"]     =   intval(htmlspecialchars($this->input->post("status", true)));
-        $model_data["comic_genre"]      =   html_escape($this->input->post("genres", true));
+            $model_data["order_by"]         =   "comic_name";
+            $model_data["direction"]        =   "ASC";
+            $model_data["comic_type"]       =   ($comic_type === "all") ? NULL : $comic_type;
+            $model_data["comic_status"]     =   $comic_status;
+            $model_data["comic_genre"]      =   html_escape($this->input->post("genres", true)) ?? NULL;
 
-        // validate Allowed Input
-        if (find_matches($allowed_name, $table_name)) $model_data["order_by"]   =  "comic_" . $table_name;
-        if (find_matches($allowed_direction, $current_direction)) $model_data["direction"] =   $current_direction;
-        if (find_matches($allowed_type, $comic_type)) $model_data["comic_type"]  =   $comic_type;
+            // validate Allowed Input
+            if (find_matches($allowed_name, $table_name)) $model_data["order_by"]   =  "comic_" . $table_name;
+            if (find_matches($allowed_direction, $current_direction)) $model_data["direction"] =   $current_direction;
+            if (find_matches($allowed_type, $comic_type)) $model_data["comic_type"]  =   $comic_type;
 
-        $this->session->set_userdata("sss-order-by", $model_data["order_by"]);
-        $this->session->set_userdata("sss-direction", $model_data["direction"]);
-        $this->session->set_userdata("sss-comic-type", $model_data["comic_type"]);
-        $this->session->set_userdata("sss-comic-status", $model_data["comic_status"]);
-        $this->session->set_userdata("sss-comic-genre", $model_data["comic_genre"]);
-        // var_dump($model_data);
-        // die;
-        return $model_data;
+            $this->session->set_userdata("sss-order-by", $model_data["order_by"]);
+            $this->session->set_userdata("sss-direction", $model_data["direction"]);
+            $this->session->set_userdata("sss-comic-type", $model_data["comic_type"]);
+            $this->session->set_userdata("sss-comic-status", $model_data["comic_status"]);
+            $this->session->set_userdata("sss-comic-genre", $model_data["comic_genre"]);
+            // var_dump($model_data);
+            // die;
+            return $model_data;
+        } else {
+            if ($this->session->userdata("sss-order-by")) {
+                $model_data = $this->_get_filter_session();
+            } else {
+                $model_data["order_by"]         =   "comic_name";
+                $model_data["direction"]        =   "ASC";
+            }
+            return $model_data;
+        }
     }
 
     private function _get_filter_session(): array

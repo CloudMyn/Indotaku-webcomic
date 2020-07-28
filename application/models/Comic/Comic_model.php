@@ -85,29 +85,42 @@ class Comic_model extends CI_Model
     */
    public function get_comic_limit(array $data): array
    {
-
-      if (@$data["comic_type"] && @$data["comic_status"] && @$data["comic_genre"]) {
-         $this->db->where("comic_type", $data["comic_type"], true);
-         $this->db->where("comic_status", intval($data["comic_status"]), true);
-         $genres = $data["comic_genre"] ?? [];
-         foreach ($genres as $genre) {
-            $this->db->like("comic_genres", $genre);
-         }
-      }
-
-
       $limit         =  $data["limit"];
       $offset        =  $data["offset"];
       $keyword       =  $data["keyword"] ?? "";
-      $order_by      =  @$data["order_by"] ?? "comic_update";
-      $ordering      =  @$data["direction"] ?? "DESC";
-
+      $order_by      =  $data["order_by"];
+      $ordering      =  $data["direction"];
 
       $this->load->helper("model");
+
+
+      if (isset($data["comic_genre"])) {
+         $index = 0;
+         foreach ($data["comic_genre"] as $genre) {
+            if ($index === 0) {
+               $this->db->or_like("comic_genre", $genre);
+            } else {
+               $this->db->like("comic_genre", $genre);
+            }
+            $index++;
+         }
+      }
+
+      if (isset($data["comic_type"])) {
+         $this->db->where("comic_type", $data["comic_type"]);
+      }
+      if (isset($data["comic_status"])) {
+         $this->db->where("comic_status", $data["comic_status"]);
+      }
+
+      // var_dump($order_by, $ordering);
       $this->db->order_by($order_by, $ordering);
+
+
+
       if ($keyword !== "") {
          $this->db->like("comic_name", $keyword, "after");
-         $this->db->or_like("comic_author", $keyword, "after");
+         $this->db->like("comic_author", $keyword, "after");
       }
       $this->db->select("`comic_name`, `comic_cover`, `comic_slug`, `comic_status`, `comic_type`");
       $lists_array = $this->db->get_where($this->_comic_table, $this->_active_comic, $limit, $offset)->result_array();
@@ -125,29 +138,34 @@ class Comic_model extends CI_Model
     */
    public function getLatestComicQuery(array $data = [])
    {
-      if (@$data["comic_type"] && @$data["comic_status"] && @$data["comic_genre"]) {
-         $this->db->where("comic_type", $data["comic_type"], true);
-         $this->db->where("comic_status", intval($data["comic_status"]), true);
-         $genres = $data["comic_genre"] ?? [];
-         foreach ($genres as $genre) {
-            $this->db->like("comic_genres", $genre);
+
+
+      if (isset($data["comic_genre"])) {
+         $index = 0;
+         foreach ($data["comic_genre"] as $genre) {
+            if ($index === 0) {
+               $this->db->or_like("comic_genre", $genre);
+            } else {
+               $this->db->like("comic_genre", $genre);
+            }
+            $index++;
          }
       }
 
+      if (isset($data["comic_type"])) {
+         $this->db->where("comic_type", $data["comic_type"], true);
+      }
+      if (isset($data["comic_status"])) {
+         $this->db->where("comic_status", $data["comic_status"], true);
+      }
 
-      $keyword       =  $data["keyword"] ?? "";
-      $order_by      =  @$data["order_by"] ?? "comic_update";
-      $ordering      =  @$data["direction"] ?? "DESC";
-
-
-      $this->load->helper("model");
-      $this->db->order_by($order_by, $ordering);
-
+      $keyword = $data["keyword"] ?? "";
       if ($keyword !== "") {
          $this->db->like("comic_name", $keyword, "after");
          $this->db->or_like("comic_author", $keyword, "after");
       }
 
+      $this->db->where($this->_active_comic);
       $this->db->from($this->_comic_table);
       return $this->db->count_all_results();
    }

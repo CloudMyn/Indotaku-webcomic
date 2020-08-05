@@ -43,7 +43,7 @@
          text-decoration: none;
       }
 
-      header div.header-search {
+      header .header-search {
          display: flex;
          flex: 0.4;
       }
@@ -87,7 +87,7 @@
             justify-content: center;
          }
 
-         header div.header-search {
+         header .header-search {
             visibility: hidden;
             flex: 0;
             display: none;
@@ -110,13 +110,12 @@
    <header>
       <div class="container py-3">
          <div id="header-brand">
-
-            <a href="#"><i class="fa fa-paper-plane" aria-hidden="true"></i>Komik Otaku</a>
+            <a href="<?= base_url() ?>">IndOtaku</a>
          </div>
 
-         <div class="header-search">
-            <input class="form-control mr-sm-2" type="text" placeholder="Temukan Komik...">
+         <form method="POST" action="<?= base_url("find/") ?>" class="header-search">
+            <input class="form-control mr-sm-2 input-kw" type="text" name="kw" placeholder="Temukan Komik..." autocomplete="false">
             <button class="btn btn-outline-main my-2 my-sm-0" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
-         </div>
+         </form>
       </div>
    </header>

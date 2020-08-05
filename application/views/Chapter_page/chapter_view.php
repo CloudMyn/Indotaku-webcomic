@@ -15,6 +15,13 @@ $this->load->helper("model");
 $chapters = $this->comic->get_comic_chapter($chapter->comic_slug);
 $chapters = array_reverse($chapters);
 
+$chapter_slug = replace($chapter->chapter_slug);
+$keywords = [
+   "Baca $chapter_slug Bahasa Indonesia",
+   "Baca Komik $chapter_slug Bahasa Indoensia",
+   "Baca Online Komik $chapter_slug Bahasa Indoensia",
+];
+
 ?>
 
 
@@ -26,6 +33,7 @@ $chapters = array_reverse($chapters);
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <meta http-equiv="X-UA-Compatible" content="ie=edge">
    <meta name="description" content="...must be filled to optimized the seo">
+   <meta name="keywords" content="<?= join(" | ", $keywords) ?>">
    <title><?= strtolower($title) ?></title>
 
    <link rel="stylesheet" href="<?= base_url() ?>assets/css/style.css">
@@ -62,7 +70,7 @@ $chapters = array_reverse($chapters);
          text-decoration: none;
       }
 
-      header div.header-search {
+      header .header-search {
          display: flex;
          flex: 0.4;
       }
@@ -128,7 +136,7 @@ $chapters = array_reverse($chapters);
             justify-content: center;
          }
 
-         header div.header-search {
+         header .header-search {
             visibility: hidden;
             flex: 0;
             display: none;
@@ -172,10 +180,10 @@ $chapters = array_reverse($chapters);
             <a href="#" class="color-dark-mode"><i class="fa fa-paper-plane" aria-hidden="true"></i>Komik Otaku</a>
          </div>
 
-         <div class="header-search">
-            <input class="form-control mr-sm-2 dark" type="text" placeholder="Temukan Komik...">
+         <form method="POST" action="<?= base_url("find/") ?>" class="header-search">
+            <input class="form-control mr-sm-2 dark" type="text" name="kw" placeholder="Temukan Komik..." autocomplete="false">
             <button class="btn btn-outline-main my-2 my-sm-0 dark" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
-         </div>
+         </form>
       </div>
    </header>
    <nav>
@@ -208,8 +216,8 @@ $chapters = array_reverse($chapters);
                </ul>
 
 
-               <form class="form-inline my-2 my-lg-0 ml-auto" id="nav-search">
-                  <input class="form-control mr-sm-2" type="text" placeholder="Search">
+               <form method="POST" action="<?= base_url("find/") ?>" class="form-inline my-2 my-lg-0 ml-auto" id="nav-search">
+                  <input class="form-control mr-sm-2" type="text" name="kw" placeholder="Temukan Komik..." autocomplete="false">
                   <button class="btn btn-outline-mainrev my-2 my-sm-0" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
                </form>
             </div>
@@ -225,8 +233,7 @@ $chapters = array_reverse($chapters);
          </div>
 
          <div class="cp-tags">
-            <p> - <i>Keywords</i> - Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod quam earum nisi
-               expedita libero explicabo. Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
+            <p> - <i>Keywords</i> - <?= join(" | ", $keywords) ?></p>
          </div>
 
          <div class="cp-action px-2">
@@ -253,7 +260,7 @@ $chapters = array_reverse($chapters);
             </div>
 
             <div class="box-left">
-               <a href="#pref" class="btn-download">Download</a>
+               <button disabled="disabled" class="btn-download btn-dwd-disabled">download</button>
             </div>
 
          </div>
@@ -279,9 +286,7 @@ $chapters = array_reverse($chapters);
          </div>
 
 
-         <div class="cp-tags mt-3">
-            <p> - <i>Keywords</i> - Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt doloremque dolore delectus quasi nam accusamus ipsa, sunt nisi, provident saepe a soluta non!, Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos, atque autem accusamus provident, possimus laudantium fuga molestias ipsum reprehenderit at hic voluptatum minus.</p>
-         </div>
+         <div class="cp-tags mt-3"><?= join(" | ", $keywords) ?> </div>
 
       </div>
    </section>
@@ -303,13 +308,20 @@ $chapters = array_reverse($chapters);
       </div>
    </footer>
 
+   <script>
+      window.addEventListener("keydown", (e) => {
+         if (e.keyCode === 39) {
+            $(".next-chapter")[0].click();
+
+         } else if (e.keyCode === 37) {
+            $(".prev-chapter")[0].click();
+         }
+      }, false);
+   </script>
+
 
    <script>
       const chapter_box = document.getElementById("chapter-box");
-      // const chapterLists = <?php //json_encode($chapter->chapter_images) 
-                              ?>;
-
-      // setTimeout(generateComicChapter, 1500)
 
       function generateComicChapter() {
          let allChapters = "";
@@ -319,7 +331,7 @@ $chapters = array_reverse($chapters);
                console.log(data);
                allChapters += `
                 <div class="chapter-img">
-                    <img src="<?= "http://localhost/komikins/" ?>${data}" alt="G.O">
+                    <img src="<?= "base_url" ?>${data}" alt="G.O">
                 </div>`;
             }
          });
@@ -328,7 +340,7 @@ $chapters = array_reverse($chapters);
       }
 
       // To Redirect
-      function to(data) {
+      const to = (data) => {
          document.location.replace(data.value);
       }
    </script>

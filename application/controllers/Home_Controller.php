@@ -28,7 +28,7 @@ class Home_Controller extends CI_Controller
          * ------------------------------------
          */
         $this->load->library("pagination");                 // Load Library Pagination Dari CI
-        $config["per_page"]     = 15;                        // Jumlah Content Per Halaman
+        $config["per_page"]     = 21;                        // Jumlah Content Per Halaman
         $config['num_links']    = 2;                        // Jumlah Digit Tombol Pagination Di Kiri & Kanan
         $config["first_link"]   = "first";                  // Tombol Awal Pagination
         $config["last_link"]    = "last";                   // Tombol Akhir Pagination
@@ -75,7 +75,17 @@ class Home_Controller extends CI_Controller
 
         $data["title"]          =   "Beranda";
         $data["popular_comics"] =   $this->comps->get_popular_comics();
-        $data["genres"]         =   $this->comps->get_all_genres();
+        // $data["genres"]         =   $this->comps->get_all_genres();
+        // Genre Example :
+        // <div class="sbox mb-3 box-shadow-min">
+        //     <h2 class="text-main-color content-title text-center">Genre</h2>
+        //     <hr class="my-2">
+        //     <ul class="genre-ul">
+        //      foreach ($genres as $genre) :
+        //         <li class="genre-li"><a class="list-a" href="#"><$genre["genre"]</a></li>
+        //      endforeach;
+        //     </ul>
+        // </div>
 
         get_views("Home_page/home_page.php", $data);
     }
@@ -208,5 +218,18 @@ class Home_Controller extends CI_Controller
         $this->session->unset_userdata("sss-comic-status");
         $this->session->unset_userdata("sss-comic-genre");
         redirect("daftar-komik");
+    }
+
+
+
+    public function search_comic()
+    {
+        if (!isset($_POST["kw"])) {
+            redirect(base_url());
+        }
+        $keyword        =   $this->input->post("kw", true);
+        $data["comics"] =   $this->comic->find_comic($keyword);
+        $data["title"]  =   "Beranda";
+        get_views("Home_page/find_comic.php", $data);
     }
 }

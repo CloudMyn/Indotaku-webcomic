@@ -29,17 +29,25 @@ class Comic_model extends CI_Model
    }
    public function get_comic($comic_slug): Comic
    {
-
+      $this->update_comic_view($comic_slug);
       $data = $this->db->get_where($this->_comic_table, ["comic_slug" => $comic_slug])->row_array();
       $comic_data = new Comic($data);
-      $this->db->update($this->_comic_table, ["comic_visited" =>  $comic_data->visited += 1], ["comic_slug" => $comic_slug]);
       return $comic_data;
    }
 
    public function get_chapter($chapter_slug): Chapter
    {
       $result_data    = $this->db->get_where($this->_chapter_table, ["chapter_slug" => $chapter_slug])->row_array();
-      return new Chapter($result_data);
+      $comic_data =  new Chapter($result_data);
+      $this->update_comic_view($comic_data->comic_slug);
+      return $comic_data;
+   }
+
+   public function update_comic_view($comic_slug)
+   {
+      $comic_data = $this->db->get_where($this->_comic_table, ["comic_slug" => $comic_slug])->row_array();
+      $current_value = $comic_data["comic_visited"];
+      $this->db->update($this->_comic_table, ["comic_visited" =>  $current_value += 1], ["comic_slug" => $comic_slug]);
    }
 
    public function get_limit_chapter($comic_slug, $limit): array
@@ -49,6 +57,14 @@ class Comic_model extends CI_Model
       $this->db->order_by("chapter_slug", "ASC");
       $array = $this->db->get_where($this->_chapter_table, ["comic_slug" => $comic_slug], $limit)->result_array();
       return $this->_array_to_obj($array, false) ?? [];
+   }
+
+   public function find_comic(string $keyword) : array
+   {
+      $this->db->like("comic_name", $keyword, "last");
+      $this->db->or_like("comic_author", $keyword, "last");
+      $result = $this->db->get($this->_comic_table)->result_array();
+      return $this->_array_to_obj($result);
    }
 
    public function get_comic_chapter(string $comic_slug)

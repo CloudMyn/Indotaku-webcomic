@@ -96,25 +96,15 @@ function get_alias_ch(string $chapter_name): string
          <div class="mp-box-right">
 
 
-            <div class="sbox mb-3 box-shadow-min">
+            <!-- <div class="sbox mb-3 box-shadow-min">
 
                <h2 class="text-main-color content-title text-center">Our Discord</h2>
                <hr class="my-2">
                <img src="<?= base_url("assets/Join-Us.png") ?>" alt="discord img" width="100%">
 
-            </div>
+            </div> -->
 
-            <div class="sbox mb-3 box-shadow-min">
-
-               <h2 class="text-main-color content-title text-center">Genre</h2>
-               <hr class="my-2">
-               <ul class="genre-ul">
-                  <?php foreach ($genres as $genre) : ?>
-                     <li class="genre-li"><a class="list-a" href="#"><?= $genre["genre"] ?></a></li>
-                  <?php endforeach; ?>
-               </ul>
-
-            </div>
+           
 
 
 
@@ -172,6 +162,7 @@ function get_alias_ch(string $chapter_name): string
                   </ul>
                </div>
             </div>
+            
          </div>
 
 

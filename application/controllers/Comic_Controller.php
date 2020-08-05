@@ -29,7 +29,6 @@ class Comic_Controller extends CI_Controller
       $data["popular_comics"] =   $this->comps->get_popular_comics();
       $data["chapters"]       =   $this->comic->get_comic_chapter($comic_slug);
       $data["similiar_comic"] =   $this->comps->get_similiar_comic($data['data']->comic_genre);
-      $data["genres"]         =   $this->comps->get_all_genres();
 
       get_views("Comic_page/comic_view.php", $data);
    }

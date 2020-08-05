@@ -1,8 +1,15 @@
 <?php
 
 $my_path = get_url_cover();
+$scores = floatval($data->comic_rating);
 
-
+$comic_slug =  replace($data->comic_slug);
+$comic_type =  $data->comic_type;
+$comic_kw   =  [
+   "Baca $comic_type $comic_slug Bahasa Indonesia",
+   "Baca Online $comic_type $comic_slug Bahasa Indonesia",
+   "Baca Komik $comic_slug"
+];
 ?>
 
 <style>
@@ -82,18 +89,17 @@ $my_path = get_url_cover();
                   </div>
                   <div class="rating-box">
                      <div class="rtx">
-                        <p>Scores : <?= $data->comic_rating ?></p>
+                        <p>Scores : <?= $scores ?></p>
                         <span class="rating-star">
-                           <i class="fa fa-star color-rate star"></i>
-                           <i class="fa fa-star color-rate star"></i>
-                           <i class="fa fa-star color-rate star"></i>
-                           <i class="fa fa-star color-rate star"></i>
-                           <i class="fa fa-star color-rate star"></i>
-                           <i class="fa fa-star color-rate star"></i>
-                           <i class="fa fa-star color-rate star"></i>
-                           <i class="fa fa-star-half-empty color-rate star"></i>
-                           <i class="fa fa-star-o color-rate star"></i>
-                           <i class="fa fa-star-o color-rate star"></i>
+                           <?php for ($i = 1; $i <= 10; $i++) : ?>
+                              <?php if ($i <= $scores) : ?>
+                                 <i class="fa fa-star color-rate star"></i>
+                              <?php elseif ($i > $scores && $i - 1 < $scores) : ?>
+                                 <i class="fa fa-star-half-o color-rate star"></i>
+                              <?php else : ?>
+                                 <i class="fa fa-star-o color-rate star"></i>
+                              <?php endif ?>
+                           <?php endfor; ?>
                         </span>
                      </div>
                   </div>
@@ -109,8 +115,7 @@ $my_path = get_url_cover();
 
                <div class="tags">
                   <h5>Keywords</h5>
-                  <p> Baca Komik Re: Zero Bahasa Indonesia | Baca Online Komik Re: Zero | Baca Manga Re: Zero
-                     | Re: Zero Bahasa Indonesia Manga</p>
+                  <p><?= join(" | ", $comic_kw)?></p>
                </div>
 
             </div>
@@ -121,9 +126,9 @@ $my_path = get_url_cover();
                <div class="chapters-box">
                   <?php foreach ($chapters as $chapter) : ?>
                      <div class="chapter-item">
-                        <a href="<?= base_url("chapter/" . $chapter->chapter_slug) ?>" class="title"><?= $chapter->chapter_name ?></a>
-                        <p class="time-ago"><?= time_elapsed_string($chapter->chapter_date)?></p>
-                        <button class="btn-chapter-dwd">Unduh</button>
+                        <a onclick="check(this)" href="<?= base_url("chapter/" . $chapter->chapter_slug) ?>" class="title"><?= $chapter->chapter_name ?></a>
+                        <p class="time-ago"><?= time_elapsed_string($chapter->chapter_date) ?></p>
+                        <!-- <button class="btn-chapter-dwd">Unduh</button> -->
                      </div>
                   <?php endforeach; ?>
                </div>
@@ -158,19 +163,47 @@ $my_path = get_url_cover();
             </div>
 
 
+            <div class="sbox mb-3 box-shadow-min">
+
+               <h2 class="text-main-color content-title text-center">Comment Disini Kuy</h2>
+               <hr class="my-2">
+
+               <div class="sp-comicbox pb-2">
+
+                  <div id="disqus_thread" class="w-100"></div>
+                  <script>
+                     /**
+                      *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+                      *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+                     /*
+                     var disqus_config = function () {
+                     this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+                     this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                     };
+                     */
+                     (function() { // DON'T EDIT BELOW THIS LINE
+                        var d = document,
+                           s = d.createElement('script');
+                        s.src = 'https://indotaku.disqus.com/embed.js';
+                        s.setAttribute('data-timestamp', +new Date());
+                        (d.head || d.body).appendChild(s);
+                     })();
+                  </script>
+                  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+
+               </div>
+            </div>
+
+
+
 
          </div>
 
          <div class="mp-box-right">
-
-
-            <div class="sbox mb-3 box-shadow-min">
-
-               <h2 class="text-main-color content-title text-center">Our Discord</h2>
-               <hr class="my-2">
-               <img src="<?= base_url("assets/Join-Us.png") ?>" alt="discord img" width="100%">
-
-            </div>
 
 
             <div class="sbox mb-3 box-shadow-min px-0">
@@ -235,3 +268,14 @@ $my_path = get_url_cover();
 
    </div>
 </section>
+
+
+<script id="dsq-count-scr" src="//indotaku.disqus.com/count.js" async></script>
+
+
+
+<script>
+   function check(val) {
+      console.log("halli")
+   }
+</script>

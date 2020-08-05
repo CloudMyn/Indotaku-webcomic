@@ -29,7 +29,7 @@ class Components extends CI_Model
     {
         $this->db->order_by("comic_visited", "DESC");
         $this->db->select("comic_name, comic_cover, comic_type, comic_slug, comic_genre");
-        $array_data = $this->db->get_where($this->_comic_table, $this->_active_comic, 7)->result_array();
+        $array_data = $this->db->get_where($this->_comic_table, $this->_active_comic, 10)->result_array();
 
         return $this->_array_to_comic_obj($array_data);
     }

@@ -32,10 +32,11 @@ $menu = ["Beranda" => "fa-home|" . base_url(), "Daftar Komik" => "fa-th-list|" .
             </ul>
 
 
-            <form class="form-inline my-2 my-lg-0 ml-auto" id="nav-search">
-               <input class="form-control mr-sm-2" type="text" placeholder="Search">
+            <form method="POST" action="<?= base_url("find/") ?>" class="form-inline my-2 my-lg-0 ml-auto" id="nav-search">
+               <input class="form-control mr-sm-2" type="text" name="kw" placeholder="Temukan Komik..." autocomplete="false">
                <button class="btn btn-outline-mainrev my-2 my-sm-0" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
             </form>
+
          </div>
       </div>
 </nav>

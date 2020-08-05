@@ -65,6 +65,9 @@ $route["daftar-komik"] = "Home_Controller/comic_lists";
 $route["daftar-komik/s-f"] = "Home_Controller/comic_lists";
 $route["daftar-komik/s-f/([0-9]*)"] = "Home_Controller/comic_lists/$1";
 
+
+$route["find"] =  "Home_controller/search_comic/";
+
 $route["chapter/([a-zA-Z 0-9 \-.]*)"] = "Comic_controller/get_comic_chapter/$1";
 $route["komik/([a-zA-Z 0-9 \-]*)"] =   function ($comic_slug) {
    return 'comic_controller/get_comic/' . $comic_slug;

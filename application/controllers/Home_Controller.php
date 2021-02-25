@@ -32,7 +32,7 @@ class Home_Controller extends CI_Controller
         $config['num_links']    = 2;                        // Jumlah Digit Tombol Pagination Di Kiri & Kanan
         $config["first_link"]   = "first";                  // Tombol Awal Pagination
         $config["last_link"]    = "last";                   // Tombol Akhir Pagination
-        $config["base_url"]     = base_url("s-f");  // Set Halaman Yang Akan Di Pasangkan Pagination
+        $config["base_url"]     = getOriginUrl() . 's-f';  // Set Halaman Yang Akan Di Pasangkan Pagination
         // $config["total_rows"]   = 0;
         $config["total_rows"]   = $this->comic->getLatestComicQuery(); // Total Baris Diamil Dari getLatestComicQuery()
         // Load Dan Init Semua Konfigurasi Pagination
@@ -65,7 +65,7 @@ class Home_Controller extends CI_Controller
          */
 
 
-        $data["start"]          = ($config["total_rows"] <= $config["per_page"]) ? 0 : $this->uri->segment(2);
+        $data["start"]          = ($config["total_rows"] <= $config["per_page"]) ? 0 : $this->uri->segment(3);
         $model_data["order_by"]     =  "comic_update";
         $model_data["direction"]    =   "DESC";
         $model_data["offset"]       =   $data["start"];

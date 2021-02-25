@@ -9,14 +9,14 @@
    <meta name="keywords" content="">
    <title><?= $title ?></title>
 
-   <link rel="stylesheet" href="<?= base_url() ?>assets/css/style.css">
-   <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap.min.css">
-   <link rel="stylesheet" href="<?= base_url() ?>assets/font-awesome/css/font-awesome.min.css">
+   <link rel="stylesheet" href="<?= getOriginUrl() ?>assets/css/style.css">
+   <link rel="stylesheet" href="<?= getOriginUrl() ?>assets/css/bootstrap.min.css">
+   <link rel="stylesheet" href="<?= getOriginUrl() ?>assets/font-awesome/css/font-awesome.min.css">
 
 
-   <link rel="stylesheet" href="<?= base_url() ?>assets/css/view/mobile-view.css">
-   <link rel="stylesheet" href="<?= base_url() ?>assets/css/view/tablet-view.css">
-   <link rel="stylesheet" href="<?= base_url() ?>assets/css/view/desktop-view.css">
+   <link rel="stylesheet" href="<?= getOriginUrl() ?>assets/css/view/mobile-view.css">
+   <link rel="stylesheet" href="<?= getOriginUrl() ?>assets/css/view/tablet-view.css">
+   <link rel="stylesheet" href="<?= getOriginUrl() ?>assets/css/view/desktop-view.css">
 
    <style>
       /* ---------------------------------- Header & Nav Style ---------------------------------- */
@@ -103,17 +103,17 @@
    </style>
 
 
-   <script src="<?= base_url() ?>/assets/js/jquery-3.3.1.slim.min.js"></script>
+   <script src="<?= getOriginUrl() ?>/assets/js/jquery-3.3.1.slim.min.js"></script>
 </head>
 
 <body>
    <header>
       <div class="container py-3">
          <div id="header-brand">
-            <a href="<?= base_url() ?>">IndOtaku</a>
+            <a href="<?= getOriginUrl() ?>">IndOtaku</a>
          </div>
 
-         <form method="POST" action="<?= base_url("find/") ?>" class="header-search">
+         <form method="POST" action="<?= getOriginUrl("find/") ?>" class="header-search">
             <input class="form-control mr-sm-2 input-kw" type="text" name="kw" placeholder="Temukan Komik..." autocomplete="false">
             <button class="btn btn-outline-main my-2 my-sm-0" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
          </form>

@@ -269,7 +269,7 @@ $keywords = [
             <?php foreach ($chapter->chapter_images as $chapter) : ?>
                <?php if (preg_match("/(http:|https)+/", $chapter) == 0) : ?>
                   <div class="chapter-img">
-                     <img src="<?= "http://localhost/komikins/" . $chapter ?>" alt="G.O">
+                     <img src="<?= get_chapter_cover($chapter) ?>" alt="G.O">
                   </div>
                <?php else : ?>
                   <div class="chapter-img">
